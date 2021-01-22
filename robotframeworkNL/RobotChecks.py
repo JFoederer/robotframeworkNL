@@ -182,10 +182,10 @@ class RobotChecks:
         # Evaluate expression
         EvaluatedResult = None
 
-        StartTime = time.clock()
+        StartTime = time.perf_counter()
         TimeLeft = TimeOutInSeconds
         while EvaluatedResult != "passed" and TimeRemaining:
-            EvaluationStartTime = time.clock()
+            EvaluationStartTime = time.perf_counter()
             if OperatorKeyword is None:
                 BuiltIn().log("Evaluating boolean expression: %s" % (LeftOperand))
                 # Evaluate boolean expression
@@ -204,10 +204,10 @@ class RobotChecks:
 
                 EvaluatedResult = "failed" if str(EvaluatedResult).lower() != "true" else "passed" 
 
-            EvaluationDuration = EvaluationStartTime - time.clock()
+            EvaluationDuration = EvaluationStartTime - time.perf_counter()
 
             # Optimize timing
-            TimeLeft = round((StartTime + TimeOutInSeconds) - time.clock(), ndigits=3)
+            TimeLeft = round((StartTime + TimeOutInSeconds) - time.perf_counter(), ndigits=3)
             TimeRemaining = TimeLeft >= 0 # include equal. Prevents failing on race conditions below 1ms accuracy.
             if EvaluatedResult != "passed" and TimeRemaining:
                 if TimeOutInSeconds > 60:
