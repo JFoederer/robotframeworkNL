@@ -40,7 +40,7 @@ class CheckOperator:
 
     ################################################################################################
     # Generic operators that can work on basically any object type
-    def is_equal_to(self, lValue, rValue):
+    def equals(self, lValue, rValue):
         """Checks whether the left and right side are equal to each other [=]"""
         return OperatorProxy("==").basicOperator(lValue, rValue)
 
@@ -60,7 +60,7 @@ class CheckOperator:
         """Checks whether the left side is greater than or equal to the right side [≥]"""
         return OperatorProxy(">=").basicOperator(lValue, rValue)
 
-    def is_not_equal_to(self, lValue, rValue):
+    def does_not_equal(self, lValue, rValue):
         """Checks whether the left side is different from the right side [≠]"""
         return OperatorProxy("!=").basicOperator(lValue, rValue)
 
@@ -142,7 +142,7 @@ class CheckOperator:
             item_found_in_parts = False
             BuiltIn().log("Processing '%s' from list" % item)
             for i in range(len(sequence_right)):
-                if self.is_equal_to(sequence_right[i],item):
+                if self.equals(sequence_right[i],item):
                     sequence_right.pop(i)
                     item_found_in_parts = True
                     break
@@ -162,20 +162,13 @@ class CheckOperator:
         """
         return not self.contains_item(sequence, part)
 
-# Add aliases to already defined operator keywords
-setattr(CheckOperator, "equals", CheckOperator.is_equal_to)
-setattr(CheckOperator, "does_not_equal", CheckOperator.is_not_equal_to)
-setattr(CheckOperator, "contains element", CheckOperator.contains_item)
-setattr(CheckOperator, "does_not_contain_element", CheckOperator.does_not_contain_item)
-
 # Add operator keywords that do not comply to Python's identifier syntax
-setattr(CheckOperator, "=", CheckOperator.is_equal_to)
-setattr(CheckOperator, "==", CheckOperator.is_equal_to)
+setattr(CheckOperator, "=", CheckOperator.equals)
 setattr(CheckOperator, "<", CheckOperator.is_less_than)
 setattr(CheckOperator, ">", CheckOperator.is_greater_than)
-setattr(CheckOperator, "<=", CheckOperator.is_less_than_or_equal_to)
-setattr(CheckOperator, ">=", CheckOperator.is_greater_than_or_equal_to)
-setattr(CheckOperator, "!=", CheckOperator.is_not_equal_to)
+setattr(CheckOperator, "≤", CheckOperator.is_less_than_or_equal_to)
+setattr(CheckOperator, "≥", CheckOperator.is_greater_than_or_equal_to)
+setattr(CheckOperator, "≠", CheckOperator.does_not_equal)
 
 class OperatorProxy:
     """
