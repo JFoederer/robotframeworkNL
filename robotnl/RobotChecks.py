@@ -65,7 +65,7 @@ class RobotChecks:
 
     def check_precondition(self, *args):
         """
-        Identical to 'check that' but for use in precondition checks.
+        Identical to `check that` but for use in precondition checks.
         
         Precondition checks are used to validate assumptions made at the start of a test case or
         keyword. When a precondition check fails it indicates that the test case did not reach the
@@ -75,7 +75,7 @@ class RobotChecks:
 
     def check_postcondition(self, *args):
         """
-        Identical to 'check that' but for use in postcondition checks
+        Identical to `check that` but for use in postcondition checks
         
         Postcondition checks are typically used in reusable keywords. They are added to assert that
         the expected result of the action was achieved successfully. A failing postcondition check
@@ -90,24 +90,37 @@ class RobotChecks:
 
         Check that takes values and/or robot keywords as input and evaluates the results. If the
         check fails it causes the test case to fail. Check that has two basic forms.
-        1) A single keyword (with its arguments) can be evaluated to a truth value
-        2) Two values or keywords (with their arguments) can be evaluated using an operator. It will
-        than have the form Check that <keyword or value> <operator> <keyword or value>.
+        - A single keyword (with its arguments) can be evaluated to a truth value
+        - Two values or keywords (with their arguments) can be evaluated using an operator. It will
+          then have the form Check that < ``keyword or value`` > < ``operator`` > < ``keyword or value`` >.
 
-        Example: Check that | Two times | 9 | equals | 18
-        'Two times' in this example is assumed to be defined as a Robot keyword that takes one
+        Operator can be any Robot keyword taking exactly two values (left and right operands) as
+        input. A number of predefined operators on numeric, string and list types are included in
+        this library.        
+
+        Examples:
+        | `Check that` | 3 | `=` | 3 |
+        | `Check that` | Two times | 6 | `equals` | 12 |
+        | `Check that` | Two times | 5 | `≠` | Two times | 7 |
+        | `Check that` | Earth exists |
+        
+        'Two times' in these examples is assumed to be defined as a Robot keyword that takes one
         argument and multiplies it by 2. Check that will pass if the evaluated result of Two times 9
         equals the fixed expected value 18.
 
-        Operator can be any Robot keyword taking exactly two values (left and right operands) as
-        input. For a number of predefined operators on numeric, string and list types refer to
-        library CheckOperator.        
-
-        Adding timing constraints:
-                Any check can be extended with an additional timing constraint by adding 'within'
-                e.g. Check that | condition becomes true | within | 1 minute 30 seconds
+        *Adding time constraints*:\n
+                Any check can be extended with an additional timing constraint by adding ``within``
                 This will cause the condition to be reevaluated until it becomes true, or until
-                the specified time has passed. In the latter case the test case will fail. 
+                the specified time has passed. In the latter case the test case will fail.
+                
+        Example with time constraint:
+        | `Check that` | condition is true | within | 1 minute 30 seconds |
+        
+        Elevator example:
+        | `Check that` | elevator doors are closed |
+        | Request elevator at floor | 3 |
+        | `Check that` | elevator floor | `equals` | 3 | within | 20 seconds |
+        | `Check that` | offset to floor level in mm | `≤` | 5 | within | 3 seconds | 
         """
         return RobotChecks.__execute_check("Requirement", *args)
 
@@ -136,7 +149,7 @@ class RobotChecks:
         """
         Suspends test execution to accept manual input of keywords.
         
-        A single 'Check interactive' will repeatedly accept keyword input. Errors from keywords will
+        A single ``Check interactive`` will repeatedly accept keyword input. Errors from keywords will
         not stop the test case, instead test execution continues until 'Cancel' is clicked or 'exit' is entered.
         There is no timeout. Test execution is suspended indefinitely.
         """
