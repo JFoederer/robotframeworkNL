@@ -6,18 +6,12 @@ This project is an extension to [Robot framework](https://robotframework.org/) a
 
 This first release introduces ``Check that`` keywords that help to vastly reduce the amount of ``${...}`` cluttering in your test cases.
 
-**It let's you turn**
-
-||||
-|---|---|---|
-| ${calculation 1}= | Two times    | ${6} |
-| ${calculation 2}= | Three times  | ${4} |
-| Should be equal   | ${calculation 1} |  ${calculation 2} |
-
-**into**
-
-|||||||
-|---|---|---|---|---|---|---|
+|**It let's you turn**||||||
+|---|---|---|---|---|---|
+| ${calculation 1}= | Two times    | ${6} ||||
+| ${calculation 2}= | Three times  | ${4} ||||
+| Should be equal   | ${calculation 1} |  ${calculation 2} ||||
+|**into**||||||
 | Check that | Two times | 6 | equals | Three times | 4 |
 
 ## Installation
