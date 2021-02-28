@@ -65,31 +65,44 @@ class RobotChecks:
 
     def check_precondition(self, *args):
         """
-        Identical to `check that` but for use in precondition checks.
+        Identical to `check that` but for use in precondition checks. Execution will not continue
+        on failure.
         
         Precondition checks are used to validate assumptions made at the start of a test case or
         keyword. When a precondition check fails it indicates that the test case did not reach the
         point where it was able to check the requirement it was testing for.  
         """
-        return RobotChecks.__execute_check("Precondition", *args)
+        try:
+            return RobotChecks.__execute_check("Precondition", *args)
+        except CheckFailed as failure:
+            failure.ROBOT_CONTINUE_ON_FAILURE = False
+            raise failure            
 
     def check_postcondition(self, *args):
         """
-        Identical to `check that` but for use in postcondition checks
+        Identical to `check that` but for use in postcondition checks. Execution will not continue
+        on failure.
         
         Postcondition checks are typically used in reusable keywords. They are added to assert that
         the expected result of the action was achieved successfully. A failing postcondition check
         causes the test case to fail, but indicates that the requirement it was testing for was not
         the cause of failure. 
         """
-        return RobotChecks.__execute_check("Postcondition", *args)
+        try:
+            return RobotChecks.__execute_check("Postcondition", *args)
+        except CheckFailed as failure:
+            failure.ROBOT_CONTINUE_ON_FAILURE = False
+            raise failure            
 
     def check_that(self, *args):
         """
         Check that is used to validate data or state from the system under test.
 
         Check that takes values and/or robot keywords as input and evaluates the results. If the
-        check fails it causes the test case to fail. Check that has two basic forms.
+        check fails it causes the test case to fail. If all keywords were executed correctly and
+        only the check fails, the test will continue to execute remaining keywords and checks.
+        
+        Check that has two basic forms.
         - A single keyword (with its arguments) can be evaluated to a truth value
         - Two values or keywords (with their arguments) can be evaluated using an operator. It will
           then have the form Check that < ``keyword or value`` > < ``operator`` > < ``keyword or value`` >.

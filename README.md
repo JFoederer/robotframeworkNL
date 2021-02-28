@@ -22,7 +22,7 @@ The recommended installation method is using [pip](http://pip-installer.org)
 After installation include `robotnl` as library in your robot file to get access to the new keywords.  
 
 ## Documentation
-[Link to keyword documentation](https://htmlpreview.github.io?https://github.com/JFoederer/robotframeworkNL/blob/main/robotnl-libdoc.html)
+[Link to keyword documentation](https://htmlpreview.github.io?https://github.com/JFoederer/robotframeworkNL/blob/main/robotnl-libdoc.html#Check%20That)
 
 Keyword documentation is in [libdoc](http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#libdoc) format, making it also directly available via intellisense in the better IDEs, like [RIDE](https://github.com/robotframework/RIDE/wiki).
 
