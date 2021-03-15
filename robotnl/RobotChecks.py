@@ -234,12 +234,15 @@ class RobotChecks:
             OperatorKeyword = NextArgument
             RightOperand = list(Arguments)
 
-        ########################################################################################
+        ###########################################################################################
         # Evaluate expression
         EvaluatedResult = None
 
         StartTime = time.perf_counter()
         TimeLeft = TimeOutInSeconds
+        PollMax = 20 # After 20s people start wondering: "Is it still going?" Time for an update.
+        PollMin = min(PollMax/8, TimeOutInSeconds*3/100) # Shortest delay is 3% of the target time.
+        PollDelay = PollMin # Initial poll delay will be 2x PollMin
         while EvaluatedResult != "passed" and TimeRemaining:
             EvaluationStartTime = time.perf_counter()
             if OperatorKeyword is None:
@@ -260,26 +263,19 @@ class RobotChecks:
 
                 EvaluatedResult = "failed" if str(EvaluatedResult).lower() != "true" else "passed" 
 
-            EvaluationDuration = EvaluationStartTime - time.perf_counter()
+            EvaluationDuration = time.perf_counter() - EvaluationStartTime
 
             # Optimize timing
             TimeLeft = round((StartTime + TimeOutInSeconds) - time.perf_counter(), ndigits=3)
             TimeRemaining = TimeLeft >= 0 # include equal. Prevents failing on race conditions below 1ms accuracy.
             if EvaluatedResult != "passed" and TimeRemaining:
-                if TimeOutInSeconds > 60:
-                    if TimeLeft < 25 or TimeOutInSeconds - TimeLeft < 20:
-                        # Speed up check cycle during the first and last parts of the waiting time
-                        # During these periods the expectation of completing the action is highest
-                        time.sleep(5)
-                    else:
-                        # Use a fixed delay time taking the actual processing time into account
-                        # taking samples at fixed intervals regardless of performance
-                        time.sleep(max(20 - EvaluationDuration, 0))
-
-                elif TimeOutInSeconds > 15:
-                    time.sleep(5) if TimeLeft > 7 else time.sleep(2)
-                else:
-                    time.sleep(1) if TimeLeft > 2 else time.sleep(.2)
+                # Polling cycle speeds up during the first and last parts of the waiting time. This
+                # increases accuracy and response time in the more critical situations, without
+                # causing an overload in polling and logging. For the maximum delay the evaluation
+                # duration of the keyword is taken into account as well.
+                PollDelay = min(TimeLeft/3, PollDelay*2)
+                PollDelay = max(PollMin, min(PollDelay, PollMax)) # > min and < max
+                time.sleep(max(PollDelay - EvaluationDuration, 0))
 
         # Do reporting
         if OperatorKeyword is None:
@@ -318,17 +314,17 @@ class RobotChecks:
             if len(operand) == 1:
                 Value = BuiltIn().replace_variables(operand[0])
                 if Value == operand[0]:
-                    BuiltIn().log("Interpreting '%s' as fixed value" % s_Operand)
+                    BuiltIn().log("Interpreting '%s' as fixed value" % s_Operand, level='DEBUG')
                 else:
                     s_Value = str(Value)
-                    BuiltIn().log("Interpreting '%s' as fixed value '%s'" % (s_Operand, s_Value))
+                    BuiltIn().log("Interpreting '%s' as fixed value '%s'" % (s_Operand, s_Value), level='DEBUG')
 
             else:
                 Value = list()
                 for item in operand:
                     Value.append(BuiltIn().replace_variables(item))
                 s_Value = str(Value)
-                BuiltIn().log("Interpreting '%s' as list '%s'" % (s_Operand, s_Value))
+                BuiltIn().log("Interpreting '%s' as list '%s'" % (s_Operand, s_Value), level='DEBUG')
 
         if s_Value:
             if len(s_Value) > 83:
