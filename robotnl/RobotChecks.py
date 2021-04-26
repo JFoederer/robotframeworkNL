@@ -286,10 +286,7 @@ class RobotChecks:
             ReportString = "%s check on '%s %s %s'" % (checkType, s_LeftOperand, OperatorKeyword, s_RightOperand)
 
         if s_TimeConstraint:
-            ActualTime = TimeOutInSeconds - TimeLeft
-            if abs(TimeLeft) > 1 and ActualTime > 2:
-                ActualTime = round(ActualTime) # skip ms detail for larger times
-            ReportString += " after %s" % secs_to_timestr(ActualTime, compact=True)
+            ReportString += " within %s" % secs_to_timestr(TimeOutInSeconds)
             if not TimeRemaining and EvaluatedResult == "passed":
                 ReportString += " (too late)"
                 raise CheckFailed(ReportString)
