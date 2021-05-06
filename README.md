@@ -33,4 +33,4 @@ This first release focuses around the *Check that* keywords. Using these keyword
 Dovich is short for Do-View-Check and the idea is simple, yet effective. Any keyword should have just one of these purposes, never more.
 - Do keywords invoke an action and typically do not return anything
 - View keyword make an observation and return this as a value. They typically do not change state.
-- Check keywords are use for verifying information, typically the result of a view-keyword and an expected value. This `robotnl` library offers generic [Check keywords](#check-that) and operators. You can build new operator keywords in your own libraries to support any check you will ever need. 
+- Check keywords are used for verifying information, typically the result of a view-keyword and an expected value. This `robotnl` library offers generic [Check keywords](#check-that) and operators. You can build new operator keywords in your own libraries to support any check you will ever need. 
