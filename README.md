@@ -27,7 +27,7 @@ After installation include `robotnl` as library in your robot file to get access
 Keyword documentation is in [libdoc](http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#libdoc) format, making it also directly available via intellisense in the better IDEs, like [RIDE](https://github.com/robotframework/RIDE/wiki).
 
 ## Check that
-This first release focuses around the *Check that* keywords. Using these keywords offers a large reduction in the need for variables in your test case and ``less variables=less ${} syntax``! It also encourages the use of the [Dovich](#dovich) principle, which is an easy way to create maintainable keyword libraries.
+This first release focuses around the *Check that* keywords. Using these keywords offers a large reduction in the need for variables in your test case and ``less variables=less ${} syntax``! It also encourages the use of the [Doobcheck](#doobcheck) principle, which is an easy way to create maintainable keyword libraries.
 
 ## Doobcheck
 Doobcheck is short for Do-Observe-Check and the idea is simple, yet effective. Any keyword should have just one of these purposes, never more.
