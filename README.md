@@ -29,8 +29,8 @@ Keyword documentation is in [libdoc](http://robotframework.org/robotframework/la
 ## Check that
 This first release focuses around the *Check that* keywords. Using these keywords offers a large reduction in the need for variables in your test case and ``less variables=less ${} syntax``! It also encourages the use of the [Dovich](#dovich) principle, which is an easy way to create maintainable keyword libraries.
 
-## Dovich
-Dovich is short for Do-View-Check and the idea is simple, yet effective. Any keyword should have just one of these purposes, never more.
-- Do keywords invoke an action and typically do not return anything
-- View keyword make an observation and return this as a value. They typically do not change state.
-- Check keywords are used for verifying information, typically the result of a view-keyword and an expected value. This `robotnl` library offers generic [Check keywords](#check-that) and operators. You can build new operator keywords in your own libraries to support any check you will ever need. 
+## Doobcheck
+Doobcheck is short for Do-Observe-Check and the idea is simple, yet effective. Any keyword should have just one of these purposes, never more.
+- Do keywords invoke an action. These keywords start with a verb and do not return anything.
+- Observation keywords return information, without affecting state. These keywords typically start with a noun, the thing that is being observed.
+- Check keywords are used for verifying information, typically using the result of an observation-keyword and an expected value. This `robotnl` library offers generic [Check keywords](#check-that) and operators. You can build new operator keywords in your own libraries to support any check you will ever need.
