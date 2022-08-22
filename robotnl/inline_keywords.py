@@ -86,16 +86,12 @@ class InlineKeyword(Generic[TypeVar('T')]):
 @TypeConverter.register
 class InlineKeywordConverter(TypeConverter):
     type = InlineKeyword
-    type_name = 'inline keyword'
+    type_name = 'keyword'
     aliases = ('keyword', 'inline keyword')
 
     def __init__(self, type_, custom_converters=None):
         super().__init__(type_)
         self.nested_types = getattr(type_, '__args__', ())
-
-    @property
-    def type_name(self):
-        return f'keyword returning {self.nested_types[0].__name__}' if self.nested_types else 'keyword'
 
     def _convert(self, value, explicit_type=True):
         if not is_keyword(value):
