@@ -28,3 +28,11 @@ class lib:
     @keyword(name="multiply '${x}' by '${y}'")
     def multiply(self, x: int, y: float):
         return x * y
+
+    @keyword(name="Named kwargs argument only")
+    def named_args_only(self, **kwargs):
+        if 'number' not in kwargs:
+            raise AssertionError("named argument number expected")
+        if type(kwargs['number']) is not int:
+            raise AssertionError("kwarg number must be an int")
+        return kwargs['number']

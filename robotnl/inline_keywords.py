@@ -65,7 +65,7 @@ def evaluate_keyword_args(*args, **kwargs):
 
     converted_dict = dict()
     for k, v in kwargs.items():
-        if is_keyword(arg):
+        if is_keyword(v):
             BuiltIn().log("Evaluating argument as keyword [%s]" % v)
             converted_dict[k] = BuiltIn().run_keyword(v)
             BuiltIn().log("%s = %s → %s" % (k, v, converted_dict[k]))

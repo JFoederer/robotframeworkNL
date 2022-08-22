@@ -32,3 +32,7 @@ embedded arguments
     Set suite variable    ${arg}    twelve
     ${value}=    echo    multiply '${arg}' by 'three quarters'
     Check that    ${value}    equals    9
+
+args and kwargs
+    ${value}=    named kwargs argument only    number=twelve
+    Check that    ${value}    equals    12
