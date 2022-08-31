@@ -1,6 +1,30 @@
 [build-system]
 requires = [
-    "setuptools>=42",
+    "setuptools>=61.0.0",
     "wheel"
 ]
 build-backend = "setuptools.build_meta"
+
+[project]
+name = "robotframework-nl"
+version = "2.0.0a2"
+description = "robotnl is a proving ground to boost Robot framework closer to Natural Language."
+readme = "README.md"
+authors = [{ name = "Johan Foederer", email = "github@famfoe.nl" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: BSD License",
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+keywords = ["robotframework", "robot", "testing", "dsl"]
+dependencies = [
+    "robotframework>=5.1",
+]
+requires-python = ">=3.8"
+
+[tool.setuptools]
+packages = ["robotnl"]
+
+[project.urls]
+Homepage = "https://github.com/JFoederer/robotframeworkNL"
