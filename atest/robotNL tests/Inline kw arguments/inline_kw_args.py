@@ -1,10 +1,9 @@
 from robot.api.deco import library
 from robotnl import keyword
-#from robot.api.deco import keyword
 from robot.libraries.BuiltIn import BuiltIn;Robot = BuiltIn()
 
 @library
-class lib:
+class inline_kw_args:
     @keyword(name="twelve")
     def fake_name(self):
         return 12

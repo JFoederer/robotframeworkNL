@@ -1,6 +1,6 @@
 *** Settings ***
 Resource          base.resource
-Library           lib.py
+Library           inline_kw_args.py
 
 *** Test Cases ***
 without typing
@@ -10,29 +10,29 @@ without typing
 
 with typing
     ${value}=    echo typed    twelve
-    Check that    ${value}    equals    12
+    Should be equal    ${value}    ${12}
 
 with wrong type
-    Run Keyword And Expect Error    REGEXP: .*cannot be converted to InlineKeyword or integer.    echo typed    three quarters
+    Run Keyword And Expect Error    REGEXP: .*cannot be converted to integer or inline keyword.    echo typed    three quarters
 
 string should stay a string
     ${value}=    echo    not a keyword
-    Check that    ${value}    equals    not a keyword
+    Should be equal    ${value}    not a keyword
 
 embedded arguments
     ${value}=    echo    multiply 'twelve' by 'three quarters'
-    Check that    ${value}    equals    9
+    Should be equal    ${value}    ${9}
     ${value}=    echo    multiply '12' by 'three quarters'
-    Check that    ${value}    equals    9
+    Should be equal    ${value}    ${9}
     ${value}=    echo    multiply '${12}' by 'three quarters'
-    Check that    ${value}    equals    9
-    Set suite variable    ${arg}    12
+    Should be equal    ${value}    ${9}
+    Set suite variable    ${arg}    ${12}
     ${value}=    echo    multiply '${arg}' by 'three quarters'
-    Check that    ${value}    equals    9
+    Should be equal    ${value}    ${9}
     Set suite variable    ${arg}    twelve
     ${value}=    echo    multiply '${arg}' by 'three quarters'
-    Check that    ${value}    equals    9
+    Should be equal    ${value}    ${9}
 
 args and kwargs
     ${value}=    named kwargs argument only    number=twelve
-    Check that    ${value}    equals    12
+    Should be equal    ${value}    ${12}

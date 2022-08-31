@@ -80,14 +80,14 @@ class InlineKeyword(Generic[TypeVar('T')]):
     Inline keywords are keywords that are used as argument to other keywords. The keyword will be
     evaluated and its return value used as the actual argument.
     """
-    def __init__(self):
-        self._name = f'keyword returning {self.__args__[0]}'
+    _name = 'inline keyword'
+
 
 @TypeConverter.register
 class InlineKeywordConverter(TypeConverter):
     type = InlineKeyword
     type_name = 'keyword'
-    aliases = ('keyword', 'inline keyword')
+    aliases = ('inline keyword', 'keyword')
 
     def __init__(self, type_, custom_converters=None):
         super().__init__(type_)
@@ -108,7 +108,7 @@ class InlineKeywordConverter(TypeConverter):
 def keyword(name=None, tags=(), types=()):
     def decorator(func):
         for var, type_ in func.__annotations__.items():
-            func.__annotations__[var] = Union[InlineKeyword[type_], type_]
+            func.__annotations__[var] = Union[type_, InlineKeyword[type_]]
         @robot_keyword(name, tags, types)
         @wraps(func)
         def wrapped(*args, **kwargs):
