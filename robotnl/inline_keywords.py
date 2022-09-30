@@ -33,6 +33,7 @@
 from robot.libraries.BuiltIn import BuiltIn
 from robot.api.deco import keyword as robot_keyword
 from robot.api import logger
+from robot.utils import type_repr
 
 from functools import wraps
 from typing import TypeVar, Generic, Union
@@ -86,12 +87,15 @@ class InlineKeyword(Generic[TypeVar('T')]):
 @TypeConverter.register
 class InlineKeywordConverter(TypeConverter):
     type = InlineKeyword
-    type_name = 'keyword'
-    aliases = ('inline keyword', 'keyword')
 
-    def __init__(self, type_, custom_converters=None):
-        super().__init__(type_)
-        self.nested_types = getattr(type_, '__args__', ())
+    def __init__(self, used_type, custom_converters=None, languages=None):
+        super().__init__(used_type, custom_converters, languages)
+        types = self._get_nested_types(used_type, expected_count=1)
+        if not types:
+            self.converter = None
+        else:
+            self.type_name = type_repr(used_type)
+            self.converter = self.converter_for(types[0], custom_converters, languages)
 
     def _convert(self, value, explicit_type=True):
         if not is_keyword(value):
@@ -99,10 +103,8 @@ class InlineKeywordConverter(TypeConverter):
         BuiltIn().log("Evaluating argument as keyword [%s]" % value)
         result = BuiltIn().run_keyword(value)
         BuiltIn().log("%s → %s" % (value, result))
-        if self.nested_types:
-            converter = TypeConverter.converter_for(self.nested_types[0])
-            if converter:
-                result = converter.convert(str(result), result, explicit_type)
+        if self.converter:
+            result = self.converter.convert(str(result), result, explicit_type)
         return result
 
 def keyword(name=None, tags=(), types=()):
