@@ -9,11 +9,11 @@ without typing
     Should be equal    ${value}    ${12}
 
 with typing
-    ${value}=    echo typed    twelve
+    ${value}=    echo int    twelve
     Should be equal    ${value}    ${12}
 
 with wrong type
-    Run Keyword And Expect Error    REGEXP: .*cannot be converted to integer or inline keyword.    echo typed    three quarters
+    Run Keyword And Expect Error    REGEXP: .*cannot be converted to integer or inline keyword.    echo int    three quarters
 
 string should stay a string
     ${value}=    echo    not a keyword
