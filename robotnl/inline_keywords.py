@@ -34,10 +34,10 @@ from robot.libraries.BuiltIn import BuiltIn
 from robot.api.deco import keyword as robot_keyword
 from robot.api import logger
 from robot.utils import type_repr
+from robot.running.arguments import TypeConverter
 
 from functools import wraps
 from typing import TypeVar, Generic, Union
-from robot.running.arguments import TypeConverter
 
 
 def is_keyword(keywordCandidate):
@@ -84,9 +84,18 @@ class InlineKeyword(Generic[TypeVar('T')]):
     _name = 'inline keyword'
 
 
+# work around for Libdoc
+try:
+    from robot.libdocpkg.standardtypes import STANDARD_TYPE_DOCS
+    STANDARD_TYPE_DOCS[InlineKeyword] = InlineKeyword.__doc__
+except:
+    pass
+
+
 @TypeConverter.register
 class InlineKeywordConverter(TypeConverter):
     type = InlineKeyword
+    type_name = 'InlineKeyword'
 
     def __init__(self, used_type, custom_converters=None, languages=None):
         super().__init__(used_type, custom_converters, languages)
@@ -106,6 +115,7 @@ class InlineKeywordConverter(TypeConverter):
         if self.converter:
             result = self.converter.convert(str(result), result, explicit_type)
         return result
+
 
 def keyword(name=None, tags=(), types=()):
     def decorator(func):
