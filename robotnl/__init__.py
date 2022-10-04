@@ -31,6 +31,7 @@
 from .version import VERSION
 from .RobotChecks import RobotChecks
 from .CheckOperator import CheckOperator
+from .inline_keywords import keyword
 
 class robotnl(RobotChecks, CheckOperator):
     """

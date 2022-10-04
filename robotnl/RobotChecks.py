@@ -1,6 +1,8 @@
+# -*- coding: utf-8 -*-
+
 # BSD 3-Clause License
 #
-# Copyright (c) 2021, J. Foederer
+# Copyright (c) 2022, J. Foederer
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,14 +30,12 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-import logging
-log = logging.getLogger('top')
-
 import time
 from tkinter import messagebox, simpledialog, Tk
 
 from robot.libraries.BuiltIn import BuiltIn
 from robot.utils import timestr_to_secs, secs_to_timestr
+from .inline_keywords import is_keyword
 
 class CheckFailed(RuntimeError):
     ROBOT_CONTINUE_ON_FAILURE = True
@@ -47,21 +47,6 @@ class RobotChecks:
         # Enables the use for Tkiniter message boxes without displaying a main window
         root = Tk()
         root.withdraw()
-
-    @staticmethod
-    def __isKeyword(keywordCandidate):
-        try:
-            BuiltIn().keyword_should_exist(keywordCandidate)
-        except AssertionError as error:
-            if hasattr(error, 'message') and "multiple keywords" in error.message.lower():
-                # The same AssertionError exception is raised when no keyword exists and when
-                # multiple keywords with the same name exist. Therefore the text message is checked
-                # as well.
-                return True
-            else:
-                return False
-        else:
-            return True
 
     def check_precondition(self, *args):
         """
@@ -215,7 +200,7 @@ class RobotChecks:
 
         # Single argument or the first argument is a keyword AND No other arguments are keywords
         if len(Arguments) == 1 or \
-                RobotChecks.__isKeyword(Arguments[0]) and not list(filter(RobotChecks.__isKeyword, Arguments[1:])):
+           is_keyword(Arguments[0]) and not list(filter(is_keyword, Arguments[1:])):
             # Interpret as single boolean expression
             LeftOperand = Arguments
 
@@ -223,7 +208,7 @@ class RobotChecks:
             LeftOperand.append(Arguments.pop(0))
     
             NextArgument = Arguments.pop(0)
-            while not RobotChecks.__isKeyword(NextArgument):
+            while not is_keyword(NextArgument):
                 LeftOperand.append(NextArgument)
 
                 # Prepare next loop
@@ -302,7 +287,7 @@ class RobotChecks:
         s_Operand = " ".join([str(elm) for elm in operand])
         s_Value = str()
 
-        if RobotChecks.__isKeyword(operand[0]):
+        if is_keyword(operand[0]):
             Value = BuiltIn().run_keyword(*operand)
             BuiltIn().log("'%s' is '%s'" % (s_Operand, Value))
             s_Value = str(Value)
