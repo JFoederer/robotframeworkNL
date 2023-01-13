@@ -43,10 +43,21 @@ class CheckFailed(RuntimeError):
 class RobotChecks:
     ROBOT_LIBRARY_SCOPE = "GLOBAL"
     def __init__(self):
-        # Create and hide a Gui.
-        # Enables the use for Tkiniter message boxes without displaying a main window
-        root = Tk()
-        root.withdraw()
+        self.__gui = None
+
+    @property
+    def _gui(self):
+        if self.__gui is not None:
+            return self.__gui
+        try:
+            # Create and hide a Gui.
+            # Enables the use for Tkiniter message boxes without displaying a main window
+            root = Tk()
+            root.withdraw()
+            self.__gui = True
+        except:
+            self.__gui = False
+        return self.__gui
 
     def check_precondition(self, *args):
         """
@@ -131,17 +142,32 @@ class RobotChecks:
         tester during test execution. Answering 'No' will cause the test case to fail.
         There is no timeout. Test execution is suspended indefinitely.
         """
-        if checkRequestText:
-            TesterVerdict = messagebox.askquestion("Check manual",
-                    "Robot test execution suspended for manual check.\n\n%s" % checkRequestText)
-            ReportString = "Manual check on '%s' [%s]" % (checkRequestText, TesterVerdict)
-            if TesterVerdict == 'yes':
-                BuiltIn().log(ReportString)
-            else:
-                raise CheckFailed(ReportString)
-
+        TesterVerdict = self.__prompt_user(checkRequestText)
+        ReportString = "Manual check on '%s' [%s]" % (checkRequestText, TesterVerdict)
+        if TesterVerdict == 'pass':
+            BuiltIn().log(ReportString)
+        elif TesterVerdict == 'fail':
+            raise CheckFailed(ReportString)
         else:
-            messagebox.showinfo("Check manual", "Robot test execution suspended. Press OK to continue")
+            BuiltIn().log("Continued by user")
+
+    def __prompt_user(self, message):
+        if self._gui:
+            if not message:
+                messagebox.showinfo("Check manual", "Robot test execution suspended. Press OK to continue")
+            else:
+                TesterVerdict = messagebox.askquestion("Check manual",
+                    "Robot test execution suspended for manual check.\n\n%s" % message)
+                return 'pass' if TesterVerdict == 'yes' else 'fail'
+        else:
+            if not message:
+                BuiltIn().log_to_console("\nRobot test execution suspended. Press ENTER to continue")
+                input()
+            else:
+                BuiltIn().log_to_console("\nRobot test execution suspended for manual check."
+                                          " (enter yes or y to pass)\n\n%s" % message)
+                keys = input().lower()
+                return 'pass' if keys == 'y' or keys == 'yes' else 'fail'
 
     def check_interactive(self):
         """
@@ -153,22 +179,28 @@ class RobotChecks:
         """
         exit = False
         exit_commands = {"exit", "quit", "stop", "e", "x", "q"}
+        prompt = "Enter a keyword. Arguments can be separated using multi-space."\
+                 " Type 'exit' or a blank keyword to exit interactive mode."
         while not exit:
-            newInput = simpledialog.askstring("Interactive keyword mode", "Enter a keyword. Arguments can be separated using multi-space. Type 'exit' or a blank keyword to exit interactive mode.")
-            if newInput is None:
-                exit = True
-            elif newInput.lower() in exit_commands:
+            if self._gui:
+                newInput = simpledialog.askstring("Interactive keyword mode", prompt)
+            else:
+                BuiltIn().log_to_console('\n'+prompt)
+                newInput = input()
+            if not newInput or newInput.lower() in exit_commands:
                 exit = True
             elif len(newInput) != 0:
-                BuiltIn().log("Interactive input: " + newInput)
+                BuiltIn().log_to_console("Interactive input: " + newInput)
                 newInputSplit = list(filter(None, [s.strip() for s in newInput.replace('\t', '  ').split('  ')])) # Splits on double space, removes additional whitespace, then filters out empty elements
                 # Unlike when "Run Keyword" is used in a .robot file, in "run_keyword()" the keyword must be explicitly split off from the arguments
                 newKeyword = newInputSplit[0]
                 newArgs = newInputSplit[1:]
                 try:
-                    BuiltIn().run_keyword(newKeyword, *newArgs)
+                    return_value = BuiltIn().run_keyword(newKeyword, *newArgs)
+                    if return_value is not None:
+                        BuiltIn().log_to_console(return_value)
                 except Exception as e:
-                    BuiltIn().log("Error in interactive keyword '%s'\n\n%s" % (newInput, e))
+                    BuiltIn().log_to_console("Error in interactive keyword '%s'\n\n%s" % (newInput, e))
 
     @staticmethod
     def __execute_check(checkType, *args):

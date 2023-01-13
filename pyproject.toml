@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "robotframework-nl"
-version = "2.0.0"
+version = "2.1.0"
 description = "robotnl is a proving ground to boost Robot framework closer to Natural Language."
 readme = "README.md"
 authors = [{ name = "Johan Foederer", email = "github@famfoe.nl" }]
