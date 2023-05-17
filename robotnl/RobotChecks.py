@@ -31,7 +31,11 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import time
-from tkinter import messagebox, simpledialog, Tk
+try:
+    import tkinter
+    from tkinter import messagebox, simpledialog
+except ImportError:
+    tkinter = False
 
 from robot.libraries.BuiltIn import BuiltIn
 from robot.utils import timestr_to_secs, secs_to_timestr
@@ -47,12 +51,12 @@ class RobotChecks:
 
     @property
     def _gui(self):
-        if self.__gui is not None:
+        if self.__gui is not None or not tkinter:
             return self.__gui
         try:
             # Create and hide a Gui.
             # Enables the use for Tkiniter message boxes without displaying a main window
-            root = Tk()
+            root = tkinter.Tk()
             root.withdraw()
             self.__gui = True
         except:
