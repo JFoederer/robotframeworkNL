@@ -288,7 +288,8 @@ class RobotChecks:
 
             # Optimize timing
             TimeLeft = round((StartTime + TimeOutInSeconds) - time.perf_counter(), ndigits=3)
-            TimeRemaining = TimeLeft >= 0 # include equal. Prevents failing on race conditions below 1ms accuracy.
+            TimeRemaining = TimeLeft >= 0 if TimeOutInSeconds else False
+                          # include equal to prevent failing on race conditions below 1ms accuracy.
             if EvaluatedResult != "passed" and TimeRemaining:
                 # Polling cycle speeds up during the first and last parts of the waiting time. This
                 # increases accuracy and response time in the more critical situations, without
