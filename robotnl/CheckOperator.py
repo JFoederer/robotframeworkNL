@@ -31,6 +31,8 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 from robot.libraries.BuiltIn import BuiltIn
+from robot.running.arguments import TypeConverter
+
 
 class CheckOperator:
     """
@@ -136,7 +138,7 @@ class CheckOperator:
     def contains_exactly_the_items_from(self, sequence, sequence_right):
         """
         Checks whether the sequence on the right side contains all items of the left side and vice versa.
-        Iterates over sequence on the left and matches each element with a single element on the right. 
+        Iterates over sequence on the left and matches each element with a single element on the right.
         """
         for item in sequence:
             item_found_in_parts = False
@@ -172,48 +174,36 @@ setattr(CheckOperator, "≠", CheckOperator.does_not_equal)
 
 class OperatorProxy:
     """
-    Proxy class for mapping generic Robot comparison keywords to Python operators 
+    Proxy class for mapping generic Robot comparison keywords to Python operators
     """
     def __init__(self, s_operator):
         self.__s_Operator = s_operator
 
     @staticmethod
-    def __typeCastRobotStringValue(leadingValue, otherValue):
+    def __typeCastRobotStringValue(leadingValue, otherValue, name):
         """
-        Robot arguments are always passed as string even when comparing numbers or other objects.
-        When a string argument is detected the other argument is deemed leading. This function
-        converts the other argument to the leading value's type when possible. Otherwise the value
-        is kept unchanged, inevitably leading to a mismatch in comparison.
-        
-        Precondition: otherValue is of types str and supports .lower()
+        When Robot files are parsed, arguments are always passed as string even when comparing
+        numbers or other objects. When a string argument is detected the other argument is
+        deemed leading. This function converts the other argument to the leading value's type
+        when possible. Otherwise the value is kept unchanged, inevitably leading to a mismatch
+        in comparison.
+
+        Precondition: otherValue is of types str and supports .casefold()
         returns type casted otherValue
         """
-        CastedOther = otherValue # By default leave untouched 
-        if type(leadingValue) is int:
-            BuiltIn().log("Comparing as integer values")
+        CastedOther = otherValue # By default leave untouched
+        converter = TypeConverter.converter_for(type(leadingValue))
+        if converter:
             try:
-                CastedOther = int(otherValue)
-            except ValueError:
-                pass
+                CastedOther = converter.convert(name, otherValue, explicit_type=False)
+            except ValueError as err:
+                BuiltIn().log(err, level='DEBUG')
+            BuiltIn().log(f"Comparing as {converter.type_name} values")
 
-        elif type(leadingValue) is float:
-            BuiltIn().log("Comparing as floating point values")
-            try:
-                CastedOther = float(otherValue)
-            except ValueError:
-                pass
-
-        elif type(leadingValue) is bool:
-            BuiltIn().log("Comparing as boolean values")
-            if otherValue.lower() == "true":
-                CastedOther = True
-            if otherValue.lower() == "false":
-                CastedOther = False
-
-        else:
+        if isinstance(CastedOther, str):
             # By default compare as case insensitive Unicode. Note that it already was a string.
-            BuiltIn().log("Interpreting '%s' as string (case insensitive)" % otherValue)
-            CastedOther = str(otherValue).lower() 
+            BuiltIn().log(f"Interpreting {name} '{otherValue}' as string (case insensitive)")
+            CastedOther = str(otherValue).casefold()
 
         return CastedOther
 
@@ -223,12 +213,12 @@ class OperatorProxy:
         rValue = rvalue
 
         if type(lvalue) is str:
-            lValue = OperatorProxy.__typeCastRobotStringValue(rvalue, lvalue)
+            lValue = OperatorProxy.__typeCastRobotStringValue(rvalue, lvalue, "left operand")
 
         if type(rvalue) is str:
-            rValue = OperatorProxy.__typeCastRobotStringValue(lvalue, rvalue)
+            rValue = OperatorProxy.__typeCastRobotStringValue(lvalue, rvalue, "right operand")
 
         if lValue is lvalue and rValue is rvalue:
-            BuiltIn().log("Comparing evaluated keyword values")
+            BuiltIn().log("Comparing values as is")
 
-        return eval("lValue %s rValue" % self.__s_Operator)                        
+        return eval(f"lValue {self.__s_Operator} rValue")

@@ -67,32 +67,32 @@ class RobotChecks:
         """
         Identical to `check that` but for use in precondition checks. Execution will not continue
         on failure.
-        
+
         Precondition checks are used to validate assumptions made at the start of a test case or
         keyword. When a precondition check fails it indicates that the test case did not reach the
-        point where it was able to check the requirement it was testing for.  
+        point where it was able to check the requirement it was testing for.
         """
         try:
             return RobotChecks.__execute_check("Precondition", *args)
         except CheckFailed as failure:
             failure.ROBOT_CONTINUE_ON_FAILURE = False
-            raise failure            
+            raise failure
 
     def check_postcondition(self, *args):
         """
         Identical to `check that` but for use in postcondition checks. Execution will not continue
         on failure.
-        
+
         Postcondition checks are typically used in reusable keywords. They are added to assert that
         the expected result of the action was achieved successfully. A failing postcondition check
         causes the test case to fail, but indicates that the requirement it was testing for was not
-        the cause of failure. 
+        the cause of failure.
         """
         try:
             return RobotChecks.__execute_check("Postcondition", *args)
         except CheckFailed as failure:
             failure.ROBOT_CONTINUE_ON_FAILURE = False
-            raise failure            
+            raise failure
 
     def check_that(self, *args):
         """
@@ -101,7 +101,7 @@ class RobotChecks:
         Check that takes values and/or robot keywords as input and evaluates the results. If the
         check fails it causes the test case to fail. If all keywords were executed correctly and
         only the check fails, the test will continue to execute remaining keywords and checks.
-        
+
         Check that has two basic forms.
         - A single keyword (with its arguments) can be evaluated to a truth value
         - Two values or keywords (with their arguments) can be evaluated using an operator. It will
@@ -109,14 +109,14 @@ class RobotChecks:
 
         Operator can be any Robot keyword taking exactly two values (left and right operands) as
         input. A number of predefined operators on numeric, string and list types are included in
-        this library.        
+        this library.
 
         Examples:
         | `Check that` | 3 | `=` | 3 |
         | `Check that` | Two times | 6 | `equals` | 12 |
         | `Check that` | Two times | 5 | `≠` | Two times | 7 |
         | `Check that` | Earth exists |
-        
+
         'Two times' in these examples is assumed to be defined as a Robot keyword that takes one
         argument and multiplies it by 2. Check that will pass if the evaluated result of Two times 9
         equals the fixed expected value 18.
@@ -125,15 +125,15 @@ class RobotChecks:
                 Any check can be extended with an additional timing constraint by adding ``within``
                 This will cause the condition to be reevaluated until it becomes true, or until
                 the specified time has passed. In the latter case the test case will fail.
-                
+
         Example with time constraint:
         | `Check that` | condition is true | within | 1 minute 30 seconds |
-        
+
         Elevator example:
         | `Check that` | elevator doors are closed |
         | Request elevator at floor | 3 |
         | `Check that` | elevator floor | `equals` | 3 | within | 20 seconds |
-        | `Check that` | offset to floor level in mm | `≤` | 5 | within | 3 seconds | 
+        | `Check that` | offset to floor level in mm | `≤` | 5 | within | 3 seconds |
         """
         return RobotChecks.__execute_check("Requirement", *args)
 
@@ -176,7 +176,7 @@ class RobotChecks:
     def check_interactive(self):
         """
         Suspends test execution to accept manual input of keywords.
-        
+
         A single ``Check interactive`` will repeatedly accept keyword input. Errors from keywords will
         not stop the test case, instead test execution continues until 'Cancel' is clicked or 'exit' is entered.
         There is no timeout. Test execution is suspended indefinitely.
@@ -210,7 +210,7 @@ class RobotChecks:
     def __execute_check(checkType, *args):
         """
         Parse arguments for check keyword to determine its operands, evaluate them and execute the
-        check. 
+        check.
         """
         Arguments = list(args)
 
@@ -222,7 +222,7 @@ class RobotChecks:
         if len(Arguments) >= 2 and str(Arguments[-2]).lower() == 'within':
             EvaluatedTimeArg = RobotChecks.__evaluateOperand([Arguments[-1]])[0]
             TimeOutInSeconds = timestr_to_secs(EvaluatedTimeArg)
-            s_TimeConstraint = Arguments[-1] 
+            s_TimeConstraint = Arguments[-1]
             Arguments = Arguments[:-2]
 
         if not len(Arguments):
@@ -242,7 +242,7 @@ class RobotChecks:
 
         else: # Interpret as expression
             LeftOperand.append(Arguments.pop(0))
-    
+
             NextArgument = Arguments.pop(0)
             while not is_keyword(NextArgument):
                 LeftOperand.append(NextArgument)
@@ -270,7 +270,7 @@ class RobotChecks:
                 BuiltIn().log("Evaluating boolean expression: %s" % (LeftOperand))
                 # Evaluate boolean expression
                 lValue, s_LeftOperand = RobotChecks.__evaluateOperand(LeftOperand)
-                EvaluatedResult = "failed" if str(lValue).lower() != "true" else "passed" 
+                EvaluatedResult = "failed" if str(lValue).lower() != "true" else "passed"
 
             else:
                 lValue, s_LeftOperand = RobotChecks.__evaluateOperand(LeftOperand)
@@ -282,7 +282,7 @@ class RobotChecks:
                     BuiltIn().log("Evaluating '%s' '%s'" % (OperatorKeyword, lValue))
                     EvaluatedResult = BuiltIn().run_keyword(OperatorKeyword, lValue)
 
-                EvaluatedResult = "failed" if str(EvaluatedResult).lower() != "true" else "passed" 
+                EvaluatedResult = "failed" if str(EvaluatedResult).lower() != "true" else "passed"
 
             EvaluationDuration = time.perf_counter() - EvaluationStartTime
 
@@ -301,11 +301,11 @@ class RobotChecks:
 
         # Do reporting
         if OperatorKeyword is None:
-            ReportString = "%s check on '%s'" % (checkType, s_LeftOperand)
+            ReportString = f"{checkType} check on '{s_LeftOperand}'"
         elif not RightOperand:
-            ReportString = "%s check on '%s %s'" % (checkType, OperatorKeyword, s_LeftOperand)
+            ReportString = f"{checkType} check on '{OperatorKeyword} {s_LeftOperand}'"
         else:
-            ReportString = "%s check on '%s %s %s'" % (checkType, s_LeftOperand, OperatorKeyword, s_RightOperand)
+            ReportString = f"{checkType} check on '{s_LeftOperand} {OperatorKeyword} {s_RightOperand}'"
 
         if s_TimeConstraint:
             ReportString += " within %s" % secs_to_timestr(TimeOutInSeconds)
@@ -326,29 +326,29 @@ class RobotChecks:
 
         if is_keyword(operand[0]):
             Value = BuiltIn().run_keyword(*operand)
-            BuiltIn().log("'%s' is '%s'" % (s_Operand, Value))
+            BuiltIn().log(f"'{s_Operand}' is '{Value}'")
             s_Value = str(Value)
 
         else:
             if len(operand) == 1:
                 Value = BuiltIn().replace_variables(operand[0])
                 if Value == operand[0]:
-                    BuiltIn().log("Interpreting '%s' as fixed value" % s_Operand, level='DEBUG')
+                    BuiltIn().log(f"Interpreting '{s_Operand}' as fixed value", level='DEBUG')
                 else:
                     s_Value = str(Value)
-                    BuiltIn().log("Interpreting '%s' as fixed value '%s'" % (s_Operand, s_Value), level='DEBUG')
+                    BuiltIn().log(f"Interpreting '{s_Operand}' as fixed value '{s_Value}'", level='DEBUG')
 
             else:
                 Value = list()
                 for item in operand:
                     Value.append(BuiltIn().replace_variables(item))
                 s_Value = str(Value)
-                BuiltIn().log("Interpreting '%s' as list '%s'" % (s_Operand, s_Value), level='DEBUG')
+                BuiltIn().log(f"Interpreting '{s_Operand}' as list '{s_Value}'", level='DEBUG')
 
         if s_Value:
             if len(s_Value) > 83:
                 s_Value = s_Value[:40] + "..." + s_Value[-40:]
 
-            s_Operand += " [%s]" % s_Value
+            s_Operand += f" [{s_Value}]"
 
         return Value, s_Operand

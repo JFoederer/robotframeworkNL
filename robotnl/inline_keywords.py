@@ -109,11 +109,16 @@ class InlineKeywordConverter(TypeConverter):
     def _convert(self, value, explicit_type=True):
         if not is_keyword(value):
             raise ValueError
-        BuiltIn().log("Evaluating argument as keyword [%s]" % value)
+        BuiltIn().log(f"Evaluating argument as keyword [{value}]")
         result = BuiltIn().run_keyword(value)
-        BuiltIn().log("%s → %s" % (value, result))
+        BuiltIn().log(f"{value} → {result}")
         if self.converter:
-            result = self.converter.convert(str(result), result, explicit_type)
+            try:
+                result = self.converter.convert(f"result of: {value}", result, explicit_type)
+            except ValueError as err:
+                BuiltIn().log(f"Incorrect keyword return type: {err}")
+                raise
+
         return result
 
 
