@@ -32,8 +32,7 @@
 
 from robot.libraries.BuiltIn import BuiltIn
 from robot.api.deco import keyword as robot_keyword
-from robot.api import logger
-from robot.utils import type_repr
+from robot.utils import type_name
 from robot.running.arguments import TypeConverter
 
 from functools import wraps
@@ -97,24 +96,21 @@ class InlineKeywordConverter(TypeConverter):
     type = InlineKeyword
     type_name = 'InlineKeyword'
 
-    def __init__(self, used_type, custom_converters=None, languages=None):
-        super().__init__(used_type, custom_converters, languages)
-        types = self._get_nested_types(used_type, expected_count=1)
-        if not types:
-            self.converter = None
-        else:
-            self.type_name = type_repr(used_type)
-            self.converter = self.converter_for(types[0], custom_converters, languages)
+    def __init__(self, type_info, custom_converters=None, languages=None):
+        super().__init__(type_info, custom_converters, languages)
+        self.converter = self.converter_for(self.type_info.nested[0])
+        self.type_name = f"keyword returning {type_name(self.type_info.nested[0].type)}"
 
-    def _convert(self, value, explicit_type=True):
+    def _convert(self, value):
         if not is_keyword(value):
             raise ValueError
         BuiltIn().log(f"Evaluating argument as keyword [{value}]")
         result = BuiltIn().run_keyword(value)
         BuiltIn().log(f"{value} → {result}")
         if self.converter:
+            # Convert the return type of the keyword to the expected type
             try:
-                result = self.converter.convert(f"result of: {value}", result, explicit_type)
+                result = self.converter.convert(result, f"result of: {value}")
             except ValueError as err:
                 BuiltIn().log(f"Incorrect keyword return type: {err}")
                 raise

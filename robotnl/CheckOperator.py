@@ -30,6 +30,7 @@
 # OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
+from robot.api import TypeInfo
 from robot.libraries.BuiltIn import BuiltIn
 from robot.running.arguments import TypeConverter
 
@@ -192,10 +193,10 @@ class OperatorProxy:
         returns type casted otherValue
         """
         CastedOther = otherValue # By default leave untouched
-        converter = TypeConverter.converter_for(type(leadingValue))
+        converter = TypeConverter.converter_for(TypeInfo.from_type(type(leadingValue)))
         if converter:
             try:
-                CastedOther = converter.convert(name, otherValue, explicit_type=False)
+                CastedOther = converter.convert(otherValue, name)
             except ValueError as err:
                 BuiltIn().log(err, level='DEBUG')
             BuiltIn().log(f"Comparing as {converter.type_name} values")
