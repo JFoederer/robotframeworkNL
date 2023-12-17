@@ -80,7 +80,6 @@ class InlineKeyword(Generic[TypeVar('T')]):
     Inline keywords are keywords that are used as argument to other keywords. The keyword will be
     evaluated and its return value used as the actual argument.
     """
-    _name = 'inline keyword'
 
 
 # work around for Libdoc
