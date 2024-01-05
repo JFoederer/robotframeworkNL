@@ -128,8 +128,8 @@ class CheckOperator:
         Iterates over the sequence to apply automatic Robot type conversion where applicable.
         """
         for item in sequence:
-            BuiltIn().log("Processing '%s' from list" % item)
-            if self.is_equal_to(part, item):
+            BuiltIn().log(f"Processing '{item}' from list")
+            if self.equals(part, item):
                 BuiltIn().log("Matched")
                 return True
             BuiltIn().log("No match")
@@ -140,19 +140,22 @@ class CheckOperator:
         Checks whether the sequence on the right side contains all items of the left side and vice versa.
         Iterates over sequence on the left and matches each element with a single element on the right.
         """
+        if isinstance(sequence_right, str):
+            sequence_right = [sequence_right]
+        sequence_right = [*sequence_right]
         for item in sequence:
             item_found_in_parts = False
-            BuiltIn().log("Processing '%s' from list" % item)
+            BuiltIn().log(f"Processing '{item}' from left side list")
             for i in range(len(sequence_right)):
-                if self.equals(sequence_right[i],item):
+                if self.equals(item, sequence_right[i]):
                     sequence_right.pop(i)
                     item_found_in_parts = True
                     break
             if not item_found_in_parts:
-                BuiltIn().log("Item '%s' from left side is not found in the list on the right side" % item)
+                BuiltIn().log(f"Item '{item}' from left side is not found in the list on the right side")
                 return False
         if len(sequence_right) > 0:
-            BuiltIn().log("Not all items from right side list are present: %s" % sequence_right)
+            BuiltIn().log(f"Not all items from right side list are present: {sequence_right}")
             return False
 
         return True
