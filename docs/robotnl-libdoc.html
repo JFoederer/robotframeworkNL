@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html id="library-documentation-top">
+<html id="library-documentation-top" lang="en">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=0">
 <meta http-equiv="Pragma" content="no-cache">
 <meta http-equiv="Expires" content="-1">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta content="Robot Framework 4.0b2 (Python 3.9.0 on win32)" name="Generator">
+<meta content="Robot Framework 6.1.1 (Python 3.11.0 on win32)" name="Generator">
 <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAKcAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAAqAAAAAAAAAAAAAAAAAAAALIAAAD/AAAA4AAAANwAAADcAAAA3AAAANwAAADcAAAA3AAAANwAAADcAAAA4AAAAP8AAACxAAAAAAAAAKYAAAD/AAAAuwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC/AAAA/wAAAKkAAAD6AAAAzAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN8AAAD/AAAA+gAAAMMAAAAAAAAAAgAAAGsAAABrAAAAawAAAGsAAABrAAAAawAAAGsAAABrAAAADAAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAAIsAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAANEAAAAAAAAA2gAAAP8AAAD6AAAAwwAAAAAAAAAAAAAAMgAAADIAAAAyAAAAMgAAADIAAAAyAAAAMgAAADIAAAAFAAAAAAAAANoAAAD/AAAA+gAAAMMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAADwAAAB8AAAAAAAAAGAAAABcAAAAAAAAAH8AAABKAAAAAAAAAAAAAAAAAAAA2gAAAP8AAAD6AAAAwwAAAAAAAADCAAAA/wAAACkAAADqAAAA4QAAAAAAAAD7AAAA/wAAALAAAAAGAAAAAAAAANoAAAD/AAAA+gAAAMMAAAAAAAAAIwAAAP4AAAD/AAAA/wAAAGAAAAAAAAAAAAAAAMkAAAD/AAAAigAAAAAAAADaAAAA/wAAAPoAAADDAAAAAAAAAAAAAAAIAAAAcAAAABkAAAAAAAAAAAAAAAAAAAAAAAAAEgAAAAAAAAAAAAAA2gAAAP8AAAD7AAAAywAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAN4AAAD/AAAAqwAAAP8AAACvAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALIAAAD/AAAAsgAAAAAAAAC5AAAA/wAAAMoAAADAAAAAwAAAAMAAAADAAAAAwAAAAMAAAADAAAAAwAAAAMkAAAD/AAAAvAAAAAAAAAAAAAAAAAAAAKwAAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAArQAAAAAAAAAAwAMAAIABAAAf+AAAP/wAAD/8AAAgBAAAP/wAAD/8AAA//AAAJIwAADHEAAA//AAAP/wAAB/4AACAAQAAwAMAAA==">
 <style media="all" type="text/css">
 :root {
@@ -20,18 +20,17 @@
     --less-important-text-color: gray;
     --link-color: #0000ee;
 }
-@media (prefers-color-scheme: dark) {
-    :root {
-        --background-color: #1c2227;
-        --text-color: #e2e1d7;
-        --border-color: #4e4e4e;
-        --light-background-color: #002b36;
-        --robot-highlight: yellow;
-        --highlighted-color: var(--background-color);
-        --highlighted-background-color: yellow;
-        --less-important-text-color: #5b6a6f;
-        --link-color: #52adff;
-    }
+[data-theme="dark"] {
+    --background-color: #1c2227;
+    --text-color: #e2e1d7;
+    --border-color: #4e4e4e;
+    --light-background-color: #002b36;
+    --robot-highlight: yellow;
+    --highlighted-color: var(--background-color);
+    --highlighted-background-color: yellow;
+    --less-important-text-color: #5b6a6f;
+    --link-color: #52adff;
+    color-scheme: dark;
 }
 body {
     background: var(--background-color);
@@ -235,6 +234,23 @@ input.hamburger-menu:checked ~ span.hamburger-menu-3
     content: '·';
     padding-left: 0.5rem;
 }
+.enum-type-members, .dt-usages-list {
+    list-style: none;
+    padding-left: 1em;
+}
+.dt-usages-list > li {
+    margin-bottom: 0.2em;
+}
+.dt-usages a {
+    text-decoration: none;
+    color: var(--text-color);
+    display: inline-block;
+    font-size: 0.9em;
+}
+.dt-usages a::first-letter {
+    font-weight: bold;
+    letter-spacing: 0.1em;
+}
 .arguments-list-container {
     overflow-y: auto;
 }
@@ -349,7 +365,7 @@ input.hamburger-menu:checked ~ span.hamburger-menu-3
         display: block;
         position: fixed;
         height: 100vh;
-        width: 100vw;
+        width: 100%;
     }
     .keywords-overview {
         border: none;
@@ -357,6 +373,7 @@ input.hamburger-menu:checked ~ span.hamburger-menu-3
     }
     .shortcuts {
         max-width: 100vw;
+        overscroll-behavior: none;
     }
 }
 .metadata {
@@ -466,9 +483,6 @@ h4 {
     display: flex;
     flex-direction: column;
 }
-.enum-type-members, .dt-usage-list {
-    list-style: none;
-}
 .data-type-container {
     border-top: 1px solid var(--border-color);
     padding: 0.5rem 1.0rem 0.5rem 1.0rem;
@@ -504,22 +518,12 @@ h4 {
     padding: 0 0.1em;
     font-size: 1.1em;
 }
+.arg-type,
 span.type,
 a.type {
     font-size: 1em;
     background: none;
     padding: 0 0
-}
-.arg-type span.or::after {
-    content: ' or ';
-}
-span.or {
-    background: none;
-    font-size: 0.7em;
-    font-family: system-ui, -apple-system, sans-serif;
-}
-.arg-type span.or:nth-last-of-type(1) {
-    display: none;
 }
 .typed-dict-item .td-type::after {
     content: ',';
@@ -570,6 +574,81 @@ span.or {
 .no-match .dt-name,
 .no-match .kw-name {
     color: var(--less-important-text-color);
+}
+.modal-icon {
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    margin: 0 0.25rem;
+    width: 1rem;
+    height: 1rem;
+    padding: 0;
+    border: none;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="100%" width="100%"><path stroke="black" fill="none" stroke-width="2px" stroke-linecap="round" d="M1 8 L1 1 L8 1 M16 1 L23 1 L23 8 M23 16 L23 23 L16 23 M8 23 L1 23 L1 16"></path><path fill="black" stroke="none" stroke-width="1px" transform="scale(1.3) translate(-3 -2.5)" d="M19 7.97zm-8 9.2-4-2.3v-4.63l4 2.33v4.6zm1-6.33L8.04 8.53 12 6.25l3.96 2.28L12 10.84zm5 4.03-4 2.3v-4.6l4-2.33v4.63z"></path></svg>');
+}
+@media (prefers-color-scheme: dark) {
+    .modal-icon {
+        background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" height="100%" width="100%"><path stroke="%23e2e1d7" fill="none" stroke-width="2px" stroke-linecap="round" d="M1 8 L1 1 L8 1 M16 1 L23 1 L23 8 M23 16 L23 23 L16 23 M8 23 L1 23 L1 16"></path><path fill="%23e2e1d7" stroke="none" stroke-width="1px" transform="scale(1.3) translate(-3 -2.5)" d="M19 7.97zm-8 9.2-4-2.3v-4.63l4 2.33v4.6zm1-6.33L8.04 8.53 12 6.25l3.96 2.28L12 10.84zm5 4.03-4 2.3v-4.6l4-2.33v4.63z"></path></svg>');
+    }
+}
+.modal-background, .modal {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+.modal-background {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 1;
+}
+.modal {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    width: 720px;
+    max-width: calc(100vw - 2rem);
+    margin: 0 auto;
+    height: calc(100vh - 6rem);
+    overflow: auto;
+    background-color: var(--background-color);
+    border: 1px solid var(--border-color);
+    border-radius: 3px;
+    z-index: 2;
+    transition-delay: 0.1s;
+}
+.modal-content {
+    margin-bottom: 3rem;
+}
+.modal > .modal-content > .data-type-container {
+    border-top: none;
+}
+.modal-close-button-wrapper {
+    display: flex;
+    justify-content: flex-end;
+}
+.modal-close-button-container {
+    width: 720px;
+    max-width: calc(100vw - 2rem);
+    margin: 0 auto;
+    overflow: auto;
+}
+.modal-close-button {
+    margin: 0.5rem 0;
+    padding: 0.25rem 0.5rem;
+    border-radius:3px;
+    border: 1px solid var(--border-color);
+    cursor: pointer;
+}
+.modal-background.visible, .modal.visible {
+    opacity: 1;
+    pointer-events: all;
+}
+#data-types-container {
+    display: none;
 }
 </style>
 <style media="all" type="text/css">
@@ -1101,7 +1180,7 @@ window.util = function () {
 jQuery.extend({highlight:function(e,t,n,r){if(e.nodeType===3){var i=e.data.match(t);if(i){var s=document.createElement(n||"span");s.className=r||"highlight";var o=e.splitText(i.index);o.splitText(i[0].length);var u=o.cloneNode(true);s.appendChild(u);o.parentNode.replaceChild(s,o);return 1}}else if(e.nodeType===1&&e.childNodes&&!/(script|style)/i.test(e.tagName)&&!(e.tagName===n.toUpperCase()&&e.className===r)){for(var a=0;a<e.childNodes.length;a++){a+=jQuery.highlight(e.childNodes[a],t,n,r)}}return 0}});jQuery.fn.unhighlight=function(e){var t={className:"highlight",element:"span"};jQuery.extend(t,e);return this.find(t.element+"."+t.className).each(function(){var e=this.parentNode;e.replaceChild(this.firstChild,this);e.normalize()}).end()};jQuery.fn.highlight=function(e,t){var n={className:"highlight",element:"span",caseSensitive:false,wordsOnly:false};jQuery.extend(n,t);if(e.constructor===String){e=[e]}e=jQuery.grep(e,function(e,t){return e!=""});e=jQuery.map(e,function(e,t){return e.replace(/[-[\]{}()*+?.,\\^$|#\s]/g,"\\$&")});if(e.length==0){return this}var r=n.caseSensitive?"":"i";var i="("+e.join("|")+")";if(n.wordsOnly){i="\\b"+i+"\\b"}var s=new RegExp(i,r);return this.each(function(){jQuery.highlight(this,s,n.element,n.className)})}
 </script>
 <script type="text/javascript">
-libdoc = {"name": "robotnl", "doc": "<p>Generic non-domain specific keywords for use by all to enhance the Natural Language experience</p>", "version": "", "generated": "2021-02-28 15:14:00", "type": "LIBRARY", "scope": "GLOBAL", "docFormat": "HTML", "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\__init__.py", "lineno": 35, "tags": [], "inits": [], "keywords": [{"name": "<", "args": [{"name": "lValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is less than or smaller than the right side [&lt;]</p>", "shortdoc": "Checks whether the left side is less than or smaller than the right side [<]", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 47}, {"name": "=", "args": [{"name": "lValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left and right side are equal to each other [=]</p>", "shortdoc": "Checks whether the left and right side are equal to each other [=]", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 43}, {"name": ">", "args": [{"name": "lValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is greater than or larger than the right side [&gt;]</p>", "shortdoc": "Checks whether the left side is greater than or larger than the right side [>]", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 51}, {"name": "Check Interactive", "args": [], "doc": "<p>Suspends test execution to accept manual input of keywords.</p>\n<p>A single <code>Check interactive</code> will repeatedly accept keyword input. Errors from keywords will not stop the test case, instead test execution continues until 'Cancel' is clicked or 'exit' is entered. There is no timeout. Test execution is suspended indefinitely.</p>", "shortdoc": "Suspends test execution to accept manual input of keywords.", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\RobotChecks.py", "lineno": 161}, {"name": "Check Manual", "args": [{"name": "checkRequestText", "types": [], "defaultValue": "", "kind": "POSITIONAL_OR_NAMED", "required": false, "repr": "checkRequestText="}], "doc": "<p>Suspends test execution to perform a manual or visual check.</p>\n<p>When used without arguments test execution is suspended until the tester clicks 'OK'. Optionally a question can be passed as argument that will be prompted for answering by the tester during test execution. Answering 'No' will cause the test case to fail. There is no timeout. Test execution is suspended indefinitely.</p>", "shortdoc": "Suspends test execution to perform a manual or visual check.", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\RobotChecks.py", "lineno": 140}, {"name": "Check Postcondition", "args": [{"name": "args", "types": [], "defaultValue": null, "kind": "VAR_POSITIONAL", "required": false, "repr": "*args"}], "doc": "<p>Identical to <a href=\"#Check%20That\" class=\"name\">check that</a> but for use in postcondition checks. Execution will not continue on failure.</p>\n<p>Postcondition checks are typically used in reusable keywords. They are added to assert that the expected result of the action was achieved successfully. A failing postcondition check causes the test case to fail, but indicates that the requirement it was testing for was not the cause of failure.</p>", "shortdoc": "Identical to `check that` but for use in postcondition checks. Execution will not continue on failure.", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\RobotChecks.py", "lineno": 81}, {"name": "Check Precondition", "args": [{"name": "args", "types": [], "defaultValue": null, "kind": "VAR_POSITIONAL", "required": false, "repr": "*args"}], "doc": "<p>Identical to <a href=\"#Check%20That\" class=\"name\">check that</a> but for use in precondition checks. Execution will not continue on failure.</p>\n<p>Precondition checks are used to validate assumptions made at the start of a test case or keyword. When a precondition check fails it indicates that the test case did not reach the point where it was able to check the requirement it was testing for.</p>", "shortdoc": "Identical to `check that` but for use in precondition checks. Execution will not continue on failure.", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\RobotChecks.py", "lineno": 66}, {"name": "Check That", "args": [{"name": "args", "types": [], "defaultValue": null, "kind": "VAR_POSITIONAL", "required": false, "repr": "*args"}], "doc": "<p>Check that is used to validate data or state from the system under test.</p>\n<p>Check that takes values and/or robot keywords as input and evaluates the results. If the check fails it causes the test case to fail. If all keywords were executed correctly and only the check fails, the test will continue to execute remaining keywords and checks.</p>\n<p>Check that has two basic forms.</p>\n<ul>\n<li>A single keyword (with its arguments) can be evaluated to a truth value</li>\n<li>Two values or keywords (with their arguments) can be evaluated using an operator. It will then have the form Check that &lt; <code>keyword or value</code> &gt; &lt; <code>operator</code> &gt; &lt; <code>keyword or value</code> &gt;.</li>\n</ul>\n<p>Operator can be any Robot keyword taking exactly two values (left and right operands) as input. A number of predefined operators on numeric, string and list types are included in this library.</p>\n<p>Examples:</p>\n<table border=\"1\">\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>3</td>\n<td><a href=\"#%3D\" class=\"name\">=</a></td>\n<td>3</td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>Two times</td>\n<td>6</td>\n<td><a href=\"#Equals\" class=\"name\">equals</a></td>\n<td>12</td>\n<td></td>\n</tr>\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>Two times</td>\n<td>5</td>\n<td><a href=\"#%E2%89%A0\" class=\"name\">\u2260</a></td>\n<td>Two times</td>\n<td>7</td>\n</tr>\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>Earth exists</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</table>\n<p>'Two times' in these examples is assumed to be defined as a Robot keyword that takes one argument and multiplies it by 2. Check that will pass if the evaluated result of Two times 9 equals the fixed expected value 18.</p>\n<p><b>Adding time constraints</b>:</p>\n<p>Any check can be extended with an additional timing constraint by adding <code>within</code> This will cause the condition to be reevaluated until it becomes true, or until the specified time has passed. In the latter case the test case will fail.</p>\n<p>Example with time constraint:</p>\n<table border=\"1\">\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>condition is true</td>\n<td>within</td>\n<td>1 minute 30 seconds</td>\n</tr>\n</table>\n<p>Elevator example:</p>\n<table border=\"1\">\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>elevator doors are closed</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>Request elevator at floor</td>\n<td>3</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>elevator floor</td>\n<td><a href=\"#Equals\" class=\"name\">equals</a></td>\n<td>3</td>\n<td>within</td>\n<td>20 seconds</td>\n</tr>\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>offset to floor level in mm</td>\n<td><a href=\"#%E2%89%A4\" class=\"name\">\u2264</a></td>\n<td>5</td>\n<td>within</td>\n<td>3 seconds</td>\n</tr>\n</table>", "shortdoc": "Check that is used to validate data or state from the system under test.", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\RobotChecks.py", "lineno": 97}, {"name": "Contains", "args": [{"name": "iterable", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "iterable"}, {"name": "part", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "part"}], "doc": "<p>Checks whether part is present in iterable. Uses primitive 'in' operator.</p>", "shortdoc": "Checks whether part is present in iterable. Uses primitive 'in' operator.", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 115}, {"name": "Contains Exact Text", "args": [{"name": "baseString", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "baseString"}, {"name": "subString", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "subString"}], "doc": "<p>Performs a case sensitive check whether the right side is a substring of the left side</p>", "shortdoc": "Performs a case sensitive check whether the right side is a substring of the left side", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 76}, {"name": "Contains Exactly The Items From", "args": [{"name": "sequence", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "sequence"}, {"name": "sequence_right", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "sequence_right"}], "doc": "<p>Checks whether the sequence on the right side contains all items of the left side and vice versa. Iterates over sequence on the left and matches each element with a single element on the right.</p>", "shortdoc": "Checks whether the sequence on the right side contains all items of the left side and vice versa. Iterates over sequence on the left and matches each element with a single element on the right.", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 136}, {"name": "Contains Item", "args": [{"name": "sequence", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "sequence"}, {"name": "part", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "part"}], "doc": "<p>Checks whether the right side item is part of the sequence on the left side. Iterates over the sequence to apply automatic Robot type conversion where applicable.</p>", "shortdoc": "Checks whether the right side item is part of the sequence on the left side. Iterates over the sequence to apply automatic Robot type conversion where applicable.", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 123}, {"name": "Contains Text", "args": [{"name": "baseString", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "baseString"}, {"name": "subString", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "subString"}], "doc": "<p>Performs a case insensitive check whether the right side is a substring of the left side</p>", "shortdoc": "Performs a case insensitive check whether the right side is a substring of the left side", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 69}, {"name": "Does Not Contain", "args": [{"name": "iterable", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "iterable"}, {"name": "part", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "part"}], "doc": "<p>Checks whether part is present in iterable. Uses primitive 'not in' operator.</p>", "shortdoc": "Checks whether part is present in iterable. Uses primitive 'not in' operator.", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 119}, {"name": "Does Not Contain Exact Text", "args": [{"name": "baseString", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "baseString"}, {"name": "subString", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "subString"}], "doc": "<p>Performs a case sensitive check whether the right side is not a substring of the left side</p>", "shortdoc": "Performs a case sensitive check whether the right side is not a substring of the left side", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 98}, {"name": "Does Not Contain Item", "args": [{"name": "sequence", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "sequence"}, {"name": "part", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "part"}], "doc": "<p>Checks whether the right side item is not part of the sequence on the left side. Iterates over the sequence to apply automatic Robot type conversion where applicable.</p>", "shortdoc": "Checks whether the right side item is not part of the sequence on the left side. Iterates over the sequence to apply automatic Robot type conversion where applicable.", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 158}, {"name": "Does Not Contain Text", "args": [{"name": "baseString", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "baseString"}, {"name": "subString", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "subString"}], "doc": "<p>Performs a case insensitive check whether the right side is not a substring of the left side</p>", "shortdoc": "Performs a case insensitive check whether the right side is not a substring of the left side", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 94}, {"name": "Does Not Equal", "args": [{"name": "lValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is different from the right side [\u2260]</p>", "shortdoc": "Checks whether the left side is different from the right side [\u2260]", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 63}, {"name": "Does Not Match With Case To", "args": [{"name": "leftText", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "leftText"}, {"name": "rightText", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rightText"}], "doc": "<p>Performs a case sensitive check whether the left and right side texts are different</p>", "shortdoc": "Performs a case sensitive check whether the left and right side texts are different", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 106}, {"name": "Does Not Match Without Case To", "args": [{"name": "leftText", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "leftText"}, {"name": "rightText", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rightText"}], "doc": "<p>Performs a case insensitive check whether the left and right side texts are different</p>", "shortdoc": "Performs a case insensitive check whether the left and right side texts are different", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 102}, {"name": "Equals", "args": [{"name": "lValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left and right side are equal to each other [=]</p>", "shortdoc": "Checks whether the left and right side are equal to each other [=]", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 43}, {"name": "Is Empty", "args": [{"name": "iterable", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "iterable"}], "doc": "", "shortdoc": "", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 112}, {"name": "Is Greater Than", "args": [{"name": "lValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is greater than or larger than the right side [&gt;]</p>", "shortdoc": "Checks whether the left side is greater than or larger than the right side [>]", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 51}, {"name": "Is Greater Than Or Equal To", "args": [{"name": "lValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is greater than or equal to the right side [\u2265]</p>", "shortdoc": "Checks whether the left side is greater than or equal to the right side [\u2265]", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 59}, {"name": "Is Less Than", "args": [{"name": "lValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is less than or smaller than the right side [&lt;]</p>", "shortdoc": "Checks whether the left side is less than or smaller than the right side [<]", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 47}, {"name": "Is Less Than Or Equal To", "args": [{"name": "lValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is less than or equal to the right side [\u2264]</p>", "shortdoc": "Checks whether the left side is less than or equal to the right side [\u2264]", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 55}, {"name": "Matches With Case To", "args": [{"name": "leftText", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "leftText"}, {"name": "rightText", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rightText"}], "doc": "<p>Performs a case sensitive check whether the left and right side texts are equal</p>", "shortdoc": "Performs a case sensitive check whether the left and right side texts are equal", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 90}, {"name": "Matches Without Case To", "args": [{"name": "leftText", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "leftText"}, {"name": "rightText", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rightText"}], "doc": "<p>Performs a case insensitive check whether the left and right side texts are equal</p>", "shortdoc": "Performs a case insensitive check whether the left and right side texts are equal", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 83}, {"name": "\u2260", "args": [{"name": "lValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is different from the right side [\u2260]</p>", "shortdoc": "Checks whether the left side is different from the right side [\u2260]", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 63}, {"name": "\u2264", "args": [{"name": "lValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is less than or equal to the right side [\u2264]</p>", "shortdoc": "Checks whether the left side is less than or equal to the right side [\u2264]", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 55}, {"name": "\u2265", "args": [{"name": "lValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "types": [], "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is greater than or equal to the right side [\u2265]</p>", "shortdoc": "Checks whether the left side is greater than or equal to the right side [\u2265]", "tags": [], "source": "C:\\Users\\johan\\github\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 59}], "dataTypes": {"enums": [], "typedDicts": []}}
+libdoc = {"specversion": 2, "name": "robotnl", "doc": "<p>Generic non-domain specific keywords for use by all to enhance the Natural Language experience</p>", "version": "", "generated": "2024-01-08T14:26:05+00:00", "type": "LIBRARY", "scope": "GLOBAL", "docFormat": "HTML", "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\__init__.py", "lineno": 36, "tags": [], "inits": [], "keywords": [{"name": "<", "args": [{"name": "lValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is less than or smaller than the right side [&lt;]</p>", "shortdoc": "Checks whether the left side is less than or smaller than the right side [<]", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 49}, {"name": "=", "args": [{"name": "lValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left and right side are equal to each other [=]</p>", "shortdoc": "Checks whether the left and right side are equal to each other [=]", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 45}, {"name": ">", "args": [{"name": "lValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is greater than or larger than the right side [&gt;]</p>", "shortdoc": "Checks whether the left side is greater than or larger than the right side [>]", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 53}, {"name": "Check Interactive", "args": [], "doc": "<p>Suspends test execution to accept manual input of keywords.</p>\n<p>A single <code>Check interactive</code> will repeatedly accept keyword input. Errors from keywords will not stop the test case, instead test execution continues until 'Cancel' is clicked or 'exit' is entered. There is no timeout. Test execution is suspended indefinitely.</p>", "shortdoc": "Suspends test execution to accept manual input of keywords.", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\RobotChecks.py", "lineno": 176}, {"name": "Check Manual", "args": [{"name": "checkRequestText", "type": null, "types": [], "typedocs": {}, "defaultValue": "", "kind": "POSITIONAL_OR_NAMED", "required": false, "repr": "checkRequestText="}], "doc": "<p>Suspends test execution to perform a manual or visual check.</p>\n<p>When used without arguments test execution is suspended until the tester clicks 'OK'. Optionally a question can be passed as argument that will be prompted for answering by the tester during test execution. Answering 'No' will cause the test case to fail. There is no timeout. Test execution is suspended indefinitely.</p>", "shortdoc": "Suspends test execution to perform a manual or visual check.", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\RobotChecks.py", "lineno": 140}, {"name": "Check Postcondition", "args": [{"name": "args", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "VAR_POSITIONAL", "required": false, "repr": "*args"}], "doc": "<p>Identical to <a href=\"#Check%20That\" class=\"name\">check that</a> but for use in postcondition checks. Execution will not continue on failure.</p>\n<p>Postcondition checks are typically used in reusable keywords. They are added to assert that the expected result of the action was achieved successfully. A failing postcondition check causes the test case to fail, but indicates that the requirement it was testing for was not the cause of failure.</p>", "shortdoc": "Identical to `check that` but for use in postcondition checks. Execution will not continue on failure.", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\RobotChecks.py", "lineno": 81}, {"name": "Check Precondition", "args": [{"name": "args", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "VAR_POSITIONAL", "required": false, "repr": "*args"}], "doc": "<p>Identical to <a href=\"#Check%20That\" class=\"name\">check that</a> but for use in precondition checks. Execution will not continue on failure.</p>\n<p>Precondition checks are used to validate assumptions made at the start of a test case or keyword. When a precondition check fails it indicates that the test case did not reach the point where it was able to check the requirement it was testing for.</p>", "shortdoc": "Identical to `check that` but for use in precondition checks. Execution will not continue on failure.", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\RobotChecks.py", "lineno": 66}, {"name": "Check That", "args": [{"name": "args", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "VAR_POSITIONAL", "required": false, "repr": "*args"}], "doc": "<p>Check that is used to validate data or state from the system under test.</p>\n<p>Check that takes values and/or robot keywords as input and evaluates the results. If the check fails it causes the test case to fail. If all keywords were executed correctly and only the check fails, the test will continue to execute remaining keywords and checks.</p>\n<p>Check that has two basic forms.</p>\n<ul>\n<li>A single keyword (with its arguments) can be evaluated to a truth value</li>\n<li>Two values or keywords (with their arguments) can be evaluated using an operator. It will then have the form Check that <code>&lt;keyword or value&gt;</code> <code>&lt;operator&gt;</code> <code>&lt;keyword or value&gt;</code>.</li>\n</ul>\n<p>Operator can be any Robot keyword taking exactly two values (left and right operands) as input. A number of predefined operators on numeric, string and list types are included in this library.</p>\n<p>Examples:</p>\n<table border=\"1\">\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>3</td>\n<td><a href=\"#%3D\" class=\"name\">=</a></td>\n<td>3</td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>Two times</td>\n<td>6</td>\n<td><a href=\"#Equals\" class=\"name\">equals</a></td>\n<td>12</td>\n<td></td>\n</tr>\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>Two times</td>\n<td>5</td>\n<td><a href=\"#%E2%89%A0\" class=\"name\">\u2260</a></td>\n<td>Two times</td>\n<td>7</td>\n</tr>\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>Earth exists</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n</table>\n<p>'Two times' in these examples is assumed to be defined as a Robot keyword that takes one argument and multiplies it by 2. Check that will pass if the evaluated result of Two times 6 equals the fixed expected value 12.</p>\n<p><b>Adding time constraints</b>:</p>\n<p>Any check can be extended with an additional timing constraint by adding <code>within</code> This will cause the condition to be reevaluated until it becomes true, or until the specified time has passed. In the latter case the test case will fail.</p>\n<p>Example with time constraint:</p>\n<table border=\"1\">\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>condition is true</td>\n<td>within</td>\n<td>1 minute 30 seconds</td>\n</tr>\n</table>\n<p>Elevator example:</p>\n<table border=\"1\">\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>elevator doors are closed</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td>Request elevator at floor</td>\n<td>3</td>\n<td></td>\n<td></td>\n<td></td>\n<td></td>\n</tr>\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>elevator floor</td>\n<td><a href=\"#Equals\" class=\"name\">equals</a></td>\n<td>3</td>\n<td>within</td>\n<td>20 seconds</td>\n</tr>\n<tr>\n<td><a href=\"#Check%20That\" class=\"name\">Check that</a></td>\n<td>offset to floor level in mm</td>\n<td><a href=\"#%E2%89%A4\" class=\"name\">\u2264</a></td>\n<td>5</td>\n<td>within</td>\n<td>3 seconds</td>\n</tr>\n</table>", "shortdoc": "Check that is used to validate data or state from the system under test.", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\RobotChecks.py", "lineno": 97}, {"name": "Contains", "args": [{"name": "iterable", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "iterable"}, {"name": "part", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "part"}], "doc": "<p>Checks whether part is present in iterable. Uses primitive 'in' operator.</p>", "shortdoc": "Checks whether part is present in iterable. Uses primitive 'in' operator.", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 117}, {"name": "Contains Exact Text", "args": [{"name": "baseString", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "baseString"}, {"name": "subString", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "subString"}], "doc": "<p>Performs a case sensitive check whether the right side is a substring of the left side</p>", "shortdoc": "Performs a case sensitive check whether the right side is a substring of the left side", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 78}, {"name": "Contains Exactly The Items From", "args": [{"name": "sequence", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "sequence"}, {"name": "sequence_right", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "sequence_right"}], "doc": "<p>Checks whether the sequence on the right side contains all items of the left side and vice versa. Iterates over sequence on the left and matches each element with a single element on the right.</p>", "shortdoc": "Checks whether the sequence on the right side contains all items of the left side and vice versa. Iterates over sequence on the left and matches each element with a single element on the right.", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 138}, {"name": "Contains Item", "args": [{"name": "sequence", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "sequence"}, {"name": "part", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "part"}], "doc": "<p>Checks whether the right side item is part of the sequence on the left side. Iterates over the sequence to apply automatic Robot type conversion where applicable.</p>", "shortdoc": "Checks whether the right side item is part of the sequence on the left side. Iterates over the sequence to apply automatic Robot type conversion where applicable.", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 125}, {"name": "Contains Text", "args": [{"name": "baseString", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "baseString"}, {"name": "subString", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "subString"}], "doc": "<p>Performs a case insensitive check whether the right side is a substring of the left side</p>", "shortdoc": "Performs a case insensitive check whether the right side is a substring of the left side", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 71}, {"name": "Does Not Contain", "args": [{"name": "iterable", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "iterable"}, {"name": "part", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "part"}], "doc": "<p>Checks whether part is present in iterable. Uses primitive 'not in' operator.</p>", "shortdoc": "Checks whether part is present in iterable. Uses primitive 'not in' operator.", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 121}, {"name": "Does Not Contain Exact Text", "args": [{"name": "baseString", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "baseString"}, {"name": "subString", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "subString"}], "doc": "<p>Performs a case sensitive check whether the right side is not a substring of the left side</p>", "shortdoc": "Performs a case sensitive check whether the right side is not a substring of the left side", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 100}, {"name": "Does Not Contain Item", "args": [{"name": "sequence", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "sequence"}, {"name": "part", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "part"}], "doc": "<p>Checks whether the right side item is not part of the sequence on the left side. Iterates over the sequence to apply automatic Robot type conversion where applicable.</p>", "shortdoc": "Checks whether the right side item is not part of the sequence on the left side. Iterates over the sequence to apply automatic Robot type conversion where applicable.", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 163}, {"name": "Does Not Contain Text", "args": [{"name": "baseString", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "baseString"}, {"name": "subString", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "subString"}], "doc": "<p>Performs a case insensitive check whether the right side is not a substring of the left side</p>", "shortdoc": "Performs a case insensitive check whether the right side is not a substring of the left side", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 96}, {"name": "Does Not Equal", "args": [{"name": "lValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is different from the right side [\u2260]</p>", "shortdoc": "Checks whether the left side is different from the right side [\u2260]", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 65}, {"name": "Does Not Match With Case To", "args": [{"name": "leftText", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "leftText"}, {"name": "rightText", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rightText"}], "doc": "<p>Performs a case sensitive check whether the left and right side texts are different</p>", "shortdoc": "Performs a case sensitive check whether the left and right side texts are different", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 108}, {"name": "Does Not Match Without Case To", "args": [{"name": "leftText", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "leftText"}, {"name": "rightText", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rightText"}], "doc": "<p>Performs a case insensitive check whether the left and right side texts are different</p>", "shortdoc": "Performs a case insensitive check whether the left and right side texts are different", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 104}, {"name": "Equals", "args": [{"name": "lValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left and right side are equal to each other [=]</p>", "shortdoc": "Checks whether the left and right side are equal to each other [=]", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 45}, {"name": "Is Empty", "args": [{"name": "iterable", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "iterable"}], "doc": "", "shortdoc": "", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 114}, {"name": "Is Greater Than", "args": [{"name": "lValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is greater than or larger than the right side [&gt;]</p>", "shortdoc": "Checks whether the left side is greater than or larger than the right side [>]", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 53}, {"name": "Is Greater Than Or Equal To", "args": [{"name": "lValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is greater than or equal to the right side [\u2265]</p>", "shortdoc": "Checks whether the left side is greater than or equal to the right side [\u2265]", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 61}, {"name": "Is Less Than", "args": [{"name": "lValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is less than or smaller than the right side [&lt;]</p>", "shortdoc": "Checks whether the left side is less than or smaller than the right side [<]", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 49}, {"name": "Is Less Than Or Equal To", "args": [{"name": "lValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is less than or equal to the right side [\u2264]</p>", "shortdoc": "Checks whether the left side is less than or equal to the right side [\u2264]", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 57}, {"name": "Matches With Case To", "args": [{"name": "leftText", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "leftText"}, {"name": "rightText", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rightText"}], "doc": "<p>Performs a case sensitive check whether the left and right side texts are equal</p>", "shortdoc": "Performs a case sensitive check whether the left and right side texts are equal", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 92}, {"name": "Matches Without Case To", "args": [{"name": "leftText", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "leftText"}, {"name": "rightText", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rightText"}], "doc": "<p>Performs a case insensitive check whether the left and right side texts are equal</p>", "shortdoc": "Performs a case insensitive check whether the left and right side texts are equal", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 85}, {"name": "\u2260", "args": [{"name": "lValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is different from the right side [\u2260]</p>", "shortdoc": "Checks whether the left side is different from the right side [\u2260]", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 65}, {"name": "\u2264", "args": [{"name": "lValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is less than or equal to the right side [\u2264]</p>", "shortdoc": "Checks whether the left side is less than or equal to the right side [\u2264]", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 57}, {"name": "\u2265", "args": [{"name": "lValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "lValue"}, {"name": "rValue", "type": null, "types": [], "typedocs": {}, "defaultValue": null, "kind": "POSITIONAL_OR_NAMED", "required": true, "repr": "rValue"}], "doc": "<p>Checks whether the left side is greater than or equal to the right side [\u2265]</p>", "shortdoc": "Checks whether the left side is greater than or equal to the right side [\u2265]", "tags": [], "source": "C:\\Users\\johan.foederer\\GitHub\\robotframeworkNL\\robotnl\\CheckOperator.py", "lineno": 61}], "dataTypes": {"enums": [], "typedDicts": []}, "typedocs": []}
 </script>
 <title></title>
 </head>
@@ -1122,44 +1201,30 @@ libdoc = {"name": "robotnl", "doc": "<p>Generic non-domain specific keywords for
     window.addEventListener("hashchange", function() {
       document.getElementsByClassName("hamburger-menu")[0].checked = false;
     }, false);
+    window.addEventListener("hashchange", function() {
+        if (window.location.hash.indexOf('#type-') == 0) {
+            const hash = '#type-modal-' + decodeURI(window.location.hash.slice(6));
+            const typeDoc = document.querySelector(".data-types").querySelector(hash);
+            if (typeDoc) {
+              showModal(typeDoc);
+            }
+        }
+    }, false);
 </script>
 
 <script type="text/javascript">
-
-    function linkArgs(container, dataTypes, usageName) {
-      container.forEach(function(keyword) {
-        let user = usageName || keyword.name
-          keyword.args.forEach(function (arg) {
-            arg.linked = arg.types.filter(function(value) {
-              return dataTypes.filter(function (dataType) {
-                 if (dataType.name === value) {
-                   if (dataType.usage.indexOf(user) === -1) {
-                    dataType.usage.push(user);
-                   }
-                   return true;
-                 }
-                 return false;
-              })[0];
-            });
-          })
-        }
-      );
-    }
 
     $(document).ready(function() {
         parseTemplates();
         document.title = libdoc.name;
         storage.init('libdoc');
-        libdoc.dataTypes = libdoc.dataTypes.enums.concat(libdoc.dataTypes.typedDicts);
-        libdoc.dataTypes = libdoc.dataTypes.map(function(dt) {
-          dt.usage = [];
-          return dt;
-        })
-        libdoc.dataTypes.sort(compare)
-        linkArgs(libdoc.inits, libdoc.dataTypes, "Importing");
-        linkArgs(libdoc.keywords, libdoc.dataTypes);
+        setTheme();
         renderTemplate('base', libdoc, $('body'));
         if (libdoc.inits.length) {
+            libdoc.typedocs.map(function(type) {
+                var index = type.usages.indexOf('__init__');
+                if (index != -1) type.usages[index] = 'Importing';
+            });
             renderTemplate('importing', libdoc);
         }
         renderTemplate('shortcuts', libdoc);
@@ -1184,16 +1249,21 @@ libdoc = {"name": "robotnl", "doc": "<p>Generic non-domain specific keywords for
             openKeywordWall();
           }
       }, 0);
+        createModal();
     });
 
-     function compare( a, b ) {
-      if ( a.name < b.name ){
-        return -1;
-      }
-      if ( a.name > b.name ){
-        return 1;
-      }
-      return 0;
+    function setTheme(theme) {
+        document.documentElement.setAttribute('data-theme', theme || getTheme());
+    }
+
+    function getTheme() {
+        if (libdoc['theme']) {
+            return libdoc['theme'];
+        } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return 'dark';
+        } else {
+            return 'light;'
+        }
     }
 
     function parseTemplates() {
@@ -1215,9 +1285,9 @@ libdoc = {"name": "robotnl", "doc": "<p>Generic non-domain specific keywords for
 
     function scrollToHash() {
         if (window.location.hash) {
-            var hash = window.location.hash.substring(1).replace('+', ' ');
-            window.location.hash = '';
-            window.location.hash = hash;
+            var hash = window.location.hash.substring(1);
+            var id = decodeURIComponent(hash);
+            document.getElementById(id).scrollIntoView();
         }
     }
 
@@ -1370,10 +1440,79 @@ libdoc = {"name": "robotnl", "doc": "<p>Generic non-domain specific keywords for
             renderTemplate('tags', libdoc);
         }
         document.getElementById("keyword-statistics-header").innerText = ''+libdoc.keywords.length;
-        if (libdoc.dataTypes.length) {
-          document.getElementById("type-statistics-header").innerText = '' + libdoc.dataTypes.length;
+        if (libdoc.typedocs.length) {
+            document.getElementById("type-statistics-header").innerText = '' + libdoc.typedocs.length;
         }
         history.replaceState && history.replaceState(null, '', location.pathname);
+    }
+
+    function createModal() {
+        const modalBackground = document.createElement('div');
+        modalBackground.id = 'modal-background';
+        modalBackground.classList.add('modal-background');
+        modalBackground.addEventListener('click', ({ target }) => {
+            if (target.id === 'modal-background') hideModal()
+        })
+
+        const modalCloseButton = document.createElement('button');
+        modalCloseButton.innerHTML = `<svg xmlns="
+      http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="2em" height="2em" className="block" data-v-2754030d="" data-v-512b0344="">
+              <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"
+                    data-v-2754030d="" fill="var(--text-color)"></path></svg>`;
+        modalCloseButton.classList.add('modal-close-button');
+        const modalCloseButtonContainer = document.createElement('div');
+        modalCloseButtonContainer.classList.add('modal-close-button-container');
+        modalCloseButtonContainer.appendChild(modalCloseButton);
+        modalCloseButton.addEventListener('click', () => {
+            hideModal()
+        })
+        modalBackground.appendChild(modalCloseButtonContainer);
+        modalCloseButtonContainer.addEventListener('click', () => {
+            hideModal()
+        })
+
+        const modal = document.createElement('div');
+        modal.id = 'modal';
+        modal.classList.add('modal');
+        modal.addEventListener('click', ({ target }) => {
+            if (target.tagName.toUpperCase() === 'A') hideModal()
+        })
+
+
+        const modalContent = document.createElement('div');
+        modalContent.id = 'modal-content';
+        modalContent.classList.add('modal-content');
+        modal.appendChild(modalContent);
+
+        modalBackground.appendChild(modal);
+        document.body.appendChild(modalBackground);
+        document.addEventListener('keydown', ({ key }) => {
+            if (key === 'Escape') hideModal()
+        })
+    }
+    function showModal(content) {
+        const modalBackground = document.getElementById('modal-background');
+        const modal = document.getElementById('modal');
+        const modalContent = document.getElementById('modal-content');
+        modalBackground.classList.add('visible');
+        modal.classList.add('visible');
+        modalContent.appendChild(content.cloneNode(true));
+        document.body.style.overflow = 'hidden';
+    }
+    function hideModal() {
+        const modalBackground = document.getElementById('modal-background');
+        const modal = document.getElementById('modal');
+        const modalContent = document.getElementById('modal-content');
+
+        modalBackground.classList.remove('visible');
+        modal.classList.remove('visible');
+        document.body.style.overflow = 'auto';
+        if (window.location.hash.indexOf('#type-') == 0)
+            history.pushState("", document.title, window.location.pathname);
+        // modal is hidden with a fading transition, timeout prevents premature emptying of modal
+        setTimeout(() => {
+            modalContent.innerHTML = '';
+        }, 200);
     }
 
     // http://stackoverflow.com/a/18484799
@@ -1384,7 +1523,6 @@ libdoc = {"name": "robotnl", "doc": "<p>Generic non-domain specific keywords for
             timer = setTimeout(callback, ms);
         };
     })();
-
 </script>
 
 <script type="text/x-jquery-tmpl" id="base-template">
@@ -1398,7 +1536,6 @@ libdoc = {"name": "robotnl", "doc": "<p>Generic non-domain specific keywords for
       <table class="metadata">
           {{if version}}<tr><th>Library version:</th><td>${version}</td></tr>{{/if}}
           {{if scope}}<tr><th>Library scope:</th><td>${scope}</td></tr>{{/if}}
-          <tr><th>Named arguments:</th><td>{{if named_args}}supported{{else}}not supported{{/if}}</td></tr>
       </table>
       <div id="introduction-container">
           <h2 id="Introduction">Introduction</h2>
@@ -1598,35 +1735,61 @@ ${name}
   </div>
 {{/if}}
 
-{{if types.length}}
-  <span class="arg-type" title="Argument '${name}' will be converter to type ${types}">
-    ${( $data.linked = linked ),''}
-    {{each types}}&lt;{{if $data.linked.indexOf($value) > -1}}<a class="type" href="#${$value}">${$value}</a>{{else}}<span class="type">${$value}</span>{{/if}}&gt;<span class="or"></span>{{/each}}
+{{if type}}
+  <span class="arg-type">
+      {{tmpl(type) 'type-info-template'}}
   </span>
 {{/if}}
 </script>
 
+<script type="text/x-jquery-tmpl" id="type-info-template">
+  <!-- Store last index to variable. Checking it the 'each' loop didn't work. -->
+  ${$item.lastIndex=nested.length-1, ""}
+  {{if union}}
+    {{each nested}}
+      {{tmpl($value) 'type-info-template'}}
+      {{if $index < $item.lastIndex}}|{{/if}}
+    {{/each}}
+  {{else}}
+    {{if typedoc}}
+      <a style="cursor: pointer;" class="type" title="Click to show type information" onclick="showModal(document.querySelector('#type-modal-${typedoc}'))">${name}</a>
+    {{else}}
+      <span class="type">${name}</span>
+    {{/if}}
+    {{if nested.length}}
+      [
+      {{each nested}}
+        {{tmpl($value) 'type-info-template'}}
+        {{if $index < $item.lastIndex}},{{/if}}
+      {{/each}}
+      ]
+    {{/if}}
+  {{/if}}
+</script>
 
 <script type="text/x-jquery-tmpl" id="data-types-template">
-    {{if dataTypes.length}}
+  {{if typedocs.length}}
     <h2 id="Data types">Data types</h2>
     <div class="data-types">
-        {{each dataTypes}}
+      {{each typedocs}}
         {{tmpl($value) 'data-type-template'}}
-        {{/each}}
+      {{/each}}
     </div>
-    {{/if}}
+  {{/if}}
 </script>
 
 <script type="text/x-jquery-tmpl" id="data-type-template">
-    <div class="data-type-container {{if hidden}}no-{{/if}}match" id="${name}">
+    <div class="data-type-container {{if hidden}}no-{{/if}}match" id="type-modal-${name}">
        <div class="data-type-name">
-            <h2>Type:
-            <a class="dt-name" href="#${encodeURIComponent(name)}"
-               title="Link to this data type">${name}</a>
-            </h2>
+            <h2>${name} (${type})</h2>
        </div>
        <div class="data-type-content">
+          {{if doc}}
+            <div class="dt-docs">
+              <h4>Documentation</h4>
+              <div class="dtdoc doc">{{html doc}}</div>
+            </div>
+          {{/if}}
           {{if members}}
             <div class="dt-members">
               <h4>Allowed Values</h4>
@@ -1634,6 +1797,9 @@ ${name}
                 {{each members}}
                 <li>
                   <span class="enum-member">${$value.name}</span>
+                  {{if accepts.indexOf("integer") != -1}}
+                    &nbsp; (<span class="enum-member">${$value.value}</span>)
+                  {{/if}}
                 </li>
                 {{/each}}
               </ul>
@@ -1655,20 +1821,22 @@ ${name}
                 </div>
             </div>
           {{/if}}
-          {{if doc}}
+          {{if accepts.length}}
             <div class="dt-docs">
-              <h4>Documentation</h4>
-              <div class="dtdoc doc">{{html doc}}</div>
+              <h4>Converted Types</h4>
+              <ul class="dt-usages-list">
+              {{each accepts}}
+                <li>${$value}</li>
+              {{/each}}
+              </ul>
             </div>
           {{/if}}
-          {{if usage}}
-            <div class="dt-usage">
-              <h4>Used in</h4>
-              <ul class="dt-usage-list">
-                {{each usage}}
-                <li>
-                <a href="#${encodeURIComponent($value)}">${$value}</a>
-                </li>
+          {{if usages.length}}
+            <div class="dt-usages">
+              <h4>Usages</h4>
+              <ul class="dt-usages-list">
+                {{each usages}}
+                  <li><a href="#${encodeURIComponent($value)}">${$value}</a></li>
                 {{/each}}
               </ul>
             </div>

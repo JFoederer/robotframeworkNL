@@ -105,7 +105,7 @@ class RobotChecks:
         Check that has two basic forms.
         - A single keyword (with its arguments) can be evaluated to a truth value
         - Two values or keywords (with their arguments) can be evaluated using an operator. It will
-          then have the form Check that < ``keyword or value`` > < ``operator`` > < ``keyword or value`` >.
+          then have the form Check that ``<keyword or value>`` ``<operator>`` ``<keyword or value>``.
 
         Operator can be any Robot keyword taking exactly two values (left and right operands) as
         input. A number of predefined operators on numeric, string and list types are included in
@@ -118,8 +118,8 @@ class RobotChecks:
         | `Check that` | Earth exists |
 
         'Two times' in these examples is assumed to be defined as a Robot keyword that takes one
-        argument and multiplies it by 2. Check that will pass if the evaluated result of Two times 9
-        equals the fixed expected value 18.
+        argument and multiplies it by 2. Check that will pass if the evaluated result of Two times 6
+        equals the fixed expected value 12.
 
         *Adding time constraints*:\n
                 Any check can be extended with an additional timing constraint by adding ``within``
