@@ -74,7 +74,7 @@ To manually interact with your automated test run during testing or test case de
 ### Keyword documentation
 
 Full documentation of the keywords offered by `robotnl` can be found here:  
-[Link to keyword documentation](https://github.com/JFoederer/robotframeworkNL/blob/main/robotnl-libdoc.html) (if html does not render, choose *raw* format then right click to *save page as*)
+[Link to keyword documentation](https://jfoederer.github.io/robotframeworkNL/robotnl-libdoc.html)
 
 Keyword documentation is in [libdoc](http://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#libdoc) format, making it also directly available via intellisense in IDEs, like [RIDE](https://github.com/robotframework/RIDE/wiki).
 
