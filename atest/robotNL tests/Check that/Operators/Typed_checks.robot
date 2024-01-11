@@ -33,6 +33,7 @@ float comparisons
     Check that    ${1}    equals    1.0
     Check that    ${1.2}    does not equal    1.21
     Check that    ${1.2}    does not equal    random text
+    Check That    1.2    Does Not Equal    ${1}
 
 bool comparisons
     Check that    True

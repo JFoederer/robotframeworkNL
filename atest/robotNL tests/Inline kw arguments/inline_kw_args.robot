@@ -13,7 +13,7 @@ with typing
     Should be equal    ${value}    ${12}
 
 with wrong type
-    Run Keyword And Expect Error    REGEXP: .*cannot be converted to integer or inline keyword.    echo int    three quarters
+    Run Keyword And Expect Error    REGEXP: .*cannot be converted to integer or keyword returning integer.    echo int    three quarters
 
 string should stay a string
     ${value}=    echo    not a keyword
