@@ -4,14 +4,28 @@ Resource          base.resource
 *** Test Cases ***
 Basic element checks
     @{empty_list}=    Create List
-    Check That    ${empty_list}    Is Empty
     @{animals}=    Create List    Bird    Wolf    Fish
+    Check That    ${empty_list}    Is Empty
+    Run Keyword And Expect Error    CheckFailed*    Check That    @{animals}    Is Empty
+    Check That    @{animals}    Counts 3 elements
+    Check That    ${empty_list}    Counts 0 elements
+    Check That    one    two    three    Counts 3 elements
+    VAR    ${three}    3
+    Check That    @{animals}    Counts ${three} elements
+    Run Keyword And Expect Error    ValueError*    Check That    @{animals}    Counts three elements
     Check That    @{animals}    Contains    Wolf
     Run Keyword And Expect Error    CheckFailed*    Check That    @{animals}    Contains    WOLF
     Check That    @{animals}    Contains Item    WOLF
     Check That    @{animals}    Does not contain    Platypus
     Check That    @{animals}    Does Not Contain Item    Platypus
     Run Keyword And Expect Error    CheckFailed*    Check That    @{animals}    Does Not Contain Item    WOLF
+    Check That    @{animals}    Contains Items    WOLF
+    Check That    @{animals}    Contains Items    Fish    WOLF
+    Check That    @{animals}    Contains Items    Fish    WOLF    WOLF
+    Check That    @{animals}    Contains Items    @{animals}
+    Check That    @{animals}    Contains Items    @{animals}    @{animals}    Fish
+    Run Keyword And Expect Error    CheckFailed*    Check That    @{animals}    Contains Items    Fish    Platypus
+    Run Keyword And Expect Error    TypeError*    Check That    @{animals}    Does Not Contain Item    Fish    Platypus
 
 Contains exactly the items from
     @{animals}=    Create List    Bird    Wolf    Fish

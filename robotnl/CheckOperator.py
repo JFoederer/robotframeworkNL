@@ -33,7 +33,9 @@
 from robot.api import TypeInfo
 from robot.libraries.BuiltIn import BuiltIn
 from robot.running.arguments import TypeConverter
+from robot.utils import is_list_like
 
+from .inline_keywords import keyword
 
 class CheckOperator:
     """
@@ -44,27 +46,39 @@ class CheckOperator:
     ################################################################################################
     # Generic operators that can work on basically any object type
     def equals(self, lValue, rValue):
-        """Checks whether the left and right side are equal to each other [=]"""
+        """Checks whether the left and right side are equal to each other [=]
+        Applies Robot type conversions when executing the check.
+        """
         return OperatorProxy("==").basicOperator(lValue, rValue)
 
     def is_less_than(self, lValue, rValue):
-        """Checks whether the left side is less than or smaller than the right side [<]"""
+        """Checks whether the left side is less than or smaller than the right side [<]
+        Applies Robot type conversions when executing the check.
+        """
         return OperatorProxy("<").basicOperator(lValue, rValue)
 
     def is_greater_than(self, lValue, rValue):
-        """Checks whether the left side is greater than or larger than the right side [>]"""
+        """Checks whether the left side is greater than or larger than the right side [>]
+        Applies Robot type conversions when executing the check.
+        """
         return OperatorProxy(">").basicOperator(lValue, rValue)
 
     def is_less_than_or_equal_to(self, lValue, rValue):
-        """Checks whether the left side is less than or equal to the right side [≤]"""
+        """Checks whether the left side is less than or equal to the right side [≤]
+        Applies Robot type conversions when executing the check.
+        """
         return OperatorProxy("<=").basicOperator(lValue, rValue)
 
     def is_greater_than_or_equal_to(self, lValue, rValue):
-        """Checks whether the left side is greater than or equal to the right side [≥]"""
+        """Checks whether the left side is greater than or equal to the right side [≥]
+        Applies Robot type conversions when executing the check.
+        """
         return OperatorProxy(">=").basicOperator(lValue, rValue)
 
     def does_not_equal(self, lValue, rValue):
-        """Checks whether the left side is different from the right side [≠]"""
+        """Checks whether the left side is different from the right side [≠]
+        Applies Robot type conversions when executing the check.
+        """
         return OperatorProxy("!=").basicOperator(lValue, rValue)
 
     ################################################################################################
@@ -113,28 +127,47 @@ class CheckOperator:
     ################################################################################################
     # Operators that work on lists or other sequences
     def is_empty(self, iterable):
+        """Checks whether the sequence on the left does not contain any elements"""
         return len(iterable) == 0
 
+    @keyword("counts ${n} elements")
+    def counts_n_elements(self, n:int, iterable):
+        """Checks whether the sequence on the left counts ${n} elements"""
+        count = len(iterable)
+        BuiltIn().log(f"Counted {count} elements")
+        return count == n
+
     def contains(self, iterable, part):
-        """Checks whether part is present in iterable. Uses primitive 'in' operator."""
+        """Checks whether part is present in iterable. Uses Python's primitive in-operator."""
         return part in iterable
 
     def does_not_contain(self, iterable, part):
-        """Checks whether part is present in iterable. Uses primitive 'not in' operator."""
+        """Checks whether part is present in iterable. Uses Python's primitive 'not in' operator."""
         return part not in iterable
 
     def contains_item(self, sequence, part):
+        """Checks whether the right side item(s) is/are part of the sequence on the left side.
+
+        'Contains item' and the plural 'Contains items' are aliases. The difference with 'Contains'
+        is that these iterate over the sequence to apply automatic Robot type conversion between
+        elements when applicable, whereas the 'Contains' keyword applies the in-operator.
         """
-        Checks whether the right side item is part of the sequence on the left side.
-        Iterates over the sequence to apply automatic Robot type conversion where applicable.
-        """
-        for item in sequence:
-            BuiltIn().log(f"Processing '{item}' from list")
-            if self.equals(part, item):
-                BuiltIn().log("Matched")
-                return True
-            BuiltIn().log("No match")
-        return False
+        if not is_list_like(part):
+            part = [part]
+        for elem in part:
+            BuiltIn().log(f"Processing '{elem}' from right side")
+            for item in sequence:
+                if self.equals(elem, item):
+                    BuiltIn().log("Matched")
+                    break
+                BuiltIn().log("No match")
+            else:
+                BuiltIn().log(f"{elem} not present in left side list")
+                return False
+        return True
+
+    # Alias for plural form
+    contains_items = contains_item
 
     def contains_exactly_the_items_from(self, sequence, sequence_right):
         """
@@ -145,14 +178,12 @@ class CheckOperator:
             sequence_right = [sequence_right]
         sequence_right = [*sequence_right]
         for item in sequence:
-            item_found_in_parts = False
             BuiltIn().log(f"Processing '{item}' from left side list")
             for i in range(len(sequence_right)):
                 if self.equals(item, sequence_right[i]):
                     sequence_right.pop(i)
-                    item_found_in_parts = True
                     break
-            if not item_found_in_parts:
+            else:
                 BuiltIn().log(f"Item '{item}' from left side is not found in the list on the right side")
                 return False
         if len(sequence_right) > 0:
@@ -165,7 +196,13 @@ class CheckOperator:
         """
         Checks whether the right side item is not part of the sequence on the left side.
         Iterates over the sequence to apply automatic Robot type conversion where applicable.
+
+        No plural variant is available for this keyword due to ambiguity with List-like values. When
+        writing "[2, 4, 6] does not contain items [4, 5, 6]", one could expect a pass, because the
+        set [4, 5, 6] is not contained, but also a fail because item 4 *is* part of the left side set.
         """
+        if is_list_like(part):
+            raise TypeError("List-like items not accepted as right side value")
         return not self.contains_item(sequence, part)
 
 # Add operator keywords that do not comply to Python's identifier syntax
