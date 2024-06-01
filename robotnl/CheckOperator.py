@@ -46,38 +46,66 @@ class CheckOperator:
     ################################################################################################
     # Generic operators that can work on basically any object type
     def equals(self, lValue, rValue):
-        """Checks whether the left and right side are equal to each other [=]
+        """Checks whether the left and right side are equal to each other [`=`]
+
         Applies Robot type conversions when executing the check.
+        Examples:
+        | `Check that` | 7 | `=` | 7 |
+        | `Check that` | ${7} | `=` | 7.0 |
+        | `Check that` | _Two times_ | 6 | `equals` | 12 |
+        | `Check that` | text | `equals` | TeXT |
         """
         return OperatorProxy("==").basicOperator(lValue, rValue)
 
     def is_less_than(self, lValue, rValue):
-        """Checks whether the left side is less than or smaller than the right side [<]
+        """Checks whether the left side `is less than` or smaller than the right side [`<`]
+
         Applies Robot type conversions when executing the check.
+        Examples:
+        | `Check that` | 2 | `<` | 4 |
+        | `Check that` | 2 | `is less than` | 4 |
         """
         return OperatorProxy("<").basicOperator(lValue, rValue)
 
     def is_greater_than(self, lValue, rValue):
-        """Checks whether the left side is greater than or larger than the right side [>]
+        """Checks whether the left side `is greater than` or larger than the right side [`>`]
+
         Applies Robot type conversions when executing the check.
+        Examples:
+        | `Check that` | 4 | `>` | 2 |
+        | `Check that` | 4 | `is greater than` | 2 |
         """
         return OperatorProxy(">").basicOperator(lValue, rValue)
 
     def is_less_than_or_equal_to(self, lValue, rValue):
-        """Checks whether the left side is less than or equal to the right side [≤]
+        """Checks whether the left side `is less than or equal` to the right side [`≤`]
+
         Applies Robot type conversions when executing the check.
+        Examples:
+        | `Check that` | 2 | `≤` | 2 |
+        | `Check that` | 2 | `is less than or equal to` | 4 |
         """
         return OperatorProxy("<=").basicOperator(lValue, rValue)
 
     def is_greater_than_or_equal_to(self, lValue, rValue):
-        """Checks whether the left side is greater than or equal to the right side [≥]
+        """Checks whether the left side `is greater than or equal to` the right side [`≥`]
+
         Applies Robot type conversions when executing the check.
+        Examples:
+        | `Check that` | 4 | `≥` | 4 |
+        | `Check that` | 4 | `is greater than or equal to` | 2 |
         """
         return OperatorProxy(">=").basicOperator(lValue, rValue)
 
     def does_not_equal(self, lValue, rValue):
-        """Checks whether the left side is different from the right side [≠]
+        """Checks whether the left side `does not equal`, i.e. is different from the right side [`≠`]
+
         Applies Robot type conversions when executing the check.
+        Examples:
+        | `Check that` | 7 | `≠` | 13 |
+        | `Check that` | 7 | `≠` | 7.01 |
+        | `Check that` | _Two times_ | 6 | `does not equal` | 13 |
+        | `Check that` | random text | `does not equal` | my text |
         """
         return OperatorProxy("!=").basicOperator(lValue, rValue)
 
@@ -148,9 +176,9 @@ class CheckOperator:
     def contains_item(self, sequence, part):
         """Checks whether the right side item(s) is/are part of the sequence on the left side.
 
-        'Contains item' and the plural 'Contains items' are aliases. The difference with 'Contains'
+        `Contains item` and the plural `Contains items` are aliases. The difference with `Contains`
         is that these iterate over the sequence to apply automatic Robot type conversion between
-        elements when applicable, whereas the 'Contains' keyword applies the in-operator.
+        elements when applicable, whereas the `Contains` keyword applies the in-operator.
         """
         if not is_list_like(part):
             part = [part]
