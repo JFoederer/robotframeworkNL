@@ -112,44 +112,84 @@ class CheckOperator:
     ################################################################################################
     # Operators that work on text items str() or Unicode()
     def contains_text(self, baseString, subString):
-        """Performs a case insensitive check whether the right side is a substring of the left side"""
+        """Performs a case insensitive check whether the right side is a substring of the left side
+
+        Examples:
+        | `Check that` | the time is now | `contains text` | me |
+        | `Check that` | the time is now | `contains text` | ME |
+        | `Check That` | Robotstraße | `contains text` | Strasse |
+        """
         try:
-            return self.contains_exact_text(baseString.lower(), subString.lower())
+            return self.contains_exact_text(baseString.casefold(), subString.casefold())
         except:
             return False
 
     def contains_exact_text(self, baseString, subString):
-        """Performs a case sensitive check whether the right side is a substring of the left side"""
+        """Performs a case sensitive check whether the right side is a substring of the left side
+
+        Examples:
+        | `Check that` | the time is now | `contains text` | me |
+        | `Check That` | Robotstraße | `contains text` | straße |
+        """
         try:
             return subString in baseString
         except:
             return False
 
     def matches_without_case_to(self, leftText, rightText):
-        """Performs a case insensitive check whether the left and right side texts are equal"""
+        """Performs a case insensitive check whether the left and right side texts are equal
+
+        Examples:
+        | `Check that` | the time is now | `matches without case to` | the time is now |
+        | `Check that` | the time is now | `matches without case to` | THE TIME IS NOW |
+        | `Check That` | Robotstraße | `matches without case to` | ROBOTstrasse |
+        """
         try:
-            return self.matches_with_case_to(leftText.lower(), rightText.lower())
+            return self.matches_with_case_to(leftText.casefold(), rightText.casefold())
         except:
             return False
 
     def matches_with_case_to(self, leftText, rightText):
-        """Performs a case sensitive check whether the left and right side texts are equal"""
+        """Performs a case sensitive check whether the left and right side texts are equal
+
+        Examples:
+        | `Check that` | the time is now | `matches with case to` | the time is now |
+        | `Check That` | Robotstraße | `matches with case to` | Robotstraße |
+        """
         return leftText == rightText
 
     def does_not_contain_text(self, baseString, subString):
-        """Performs a case insensitive check whether the right side is not a substring of the left side"""
+        """Performs a case insensitive check whether the right side is not a substring of the left side
+
+        Examples:
+        | `Check that` | random text | `does not contain text` | my text |
+        """
         return not self.contains_text(baseString, subString)
 
     def does_not_contain_exact_text(self, baseString, subString):
-        """Performs a case sensitive check whether the right side is not a substring of the left side"""
+        """Performs a case sensitive check whether the right side is not a substring of the left side
+
+        Examples:
+        | `Check that` | random text | `does not contain exact text` | my text |
+        | `Check that` | random text | `does not contain exact text` | RANDOM text |
+        """
         return not self.contains_exact_text(baseString, subString)
 
     def does_not_match_without_case_to(self, leftText, rightText):
-        """Performs a case insensitive check whether the left and right side texts are different"""
+        """Performs a case insensitive check whether the left and right side texts are different
+
+        Examples:
+        | `Check that` | random text | `does not match without case to` | my text |
+        """
         return not self.matches_without_case_to(leftText, rightText)
 
     def does_not_match_with_case_to(self, leftText, rightText):
-        """Performs a case sensitive check whether the left and right side texts are different"""
+        """Performs a case sensitive check whether the left and right side texts are different
+
+        Examples:
+        | `Check that` | random text | `does not match with case to` | my text |
+        | `Check that` | random text | `does not match with case to` | RANDOM text |
+        """
         return not self.matches_with_case_to(leftText, rightText)
 
     ################################################################################################
