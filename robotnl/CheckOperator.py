@@ -195,30 +195,68 @@ class CheckOperator:
     ################################################################################################
     # Operators that work on lists or other sequences
     def is_empty(self, iterable):
-        """Checks whether the sequence on the left does not contain any elements"""
+        """Checks whether the sequence on the left does not contain any elements
+
+        Example:
+        | Take new shopping cart |
+        | `Check that` | shopping cart | `is empty` |
+        _Assumes a 'shopping cart' type to be defined with associated action and observation keywords._
+        """
         return len(iterable) == 0
 
     @keyword("counts ${n} elements")
     def counts_n_elements(self, n:int, iterable):
-        """Checks whether the sequence on the left counts ${n} elements"""
+        """Checks whether the sequence on the left counts ${n} elements
+
+        Example:
+        | `Check precondition` | shopping cart | `is empty` |
+        | Add 1 cube to shopping cart |
+        | Add 1 sphere to shopping cart |
+        | `Check that` | shopping cart | `counts 2 elements` |
+        _Assumes a 'shopping cart' type to be defined with associated action and observation keywords._
+        """
         count = len(iterable)
         BuiltIn().log(f"Counted {count} elements")
         return count == n
 
     def contains(self, iterable, part):
-        """Checks whether part is present in iterable. Uses Python's primitive in-operator."""
+        """Checks whether part is present in iterable. Uses Python's primitive in-operator.
+
+        Example:
+        | Add 1 cube to shopping cart |
+        | Add 1 sphere to shopping cart |
+        | `Check that` | shopping cart | `contains` | cube |
+        | `Check that` | shopping cart | `contains` | sphere |
+        _Assumes a 'shopping cart' type to be defined with associated action and observation keywords._
+        """
         return part in iterable
 
     def does_not_contain(self, iterable, part):
-        """Checks whether part is present in iterable. Uses Python's primitive 'not in' operator."""
+        """Checks whether part is present in iterable. Uses Python's primitive 'not in' operator.
+
+        Example:
+        | `Check precondition` | shopping cart | `is empty` |
+        | Add 1 cube to shopping cart |
+        | `Check that` | shopping cart | `does not contain` | sphere |
+        _Assumes a 'shopping cart' type to be defined with associated action and observation keywords._
+        """
         return part not in iterable
 
     def contains_item(self, sequence, part):
         """Checks whether the right side item(s) is/are part of the sequence on the left side.
 
         `Contains item` and the plural `Contains items` are aliases. The difference with `Contains`
-        is that these iterate over the sequence to apply automatic Robot type conversion between
-        elements when applicable, whereas the `Contains` keyword applies the in-operator.
+        is that these iterate over the sequence and applies *automatic Robot type conversion*
+        between elements when applicable. Duplicate items from the right side can match a single
+        item from the left side.
+
+        Example:
+        | Add 2 cubes to shopping cart |
+        | Add 1 sphere to shopping cart |
+        | `Check that` | shopping cart | `contains item` | cube |
+        | `Check that` | shopping cart | `contains items` | sphere | cube |
+        | `Check that` | shopping cart's price list | `contains items` | 2.50 | ${1.99} |
+        _Assumes a 'shopping cart' type to be defined with associated action and observation keywords._
         """
         if not is_list_like(part):
             part = [part]
@@ -241,6 +279,15 @@ class CheckOperator:
         """
         Checks whether the sequence on the right side contains all items of the left side and vice versa.
         Iterates over sequence on the left and matches each element with a single element on the right.
+        The items can be in any order.
+
+        Example:
+        | `Check precondition` | shopping cart | `is empty` |
+        | Add 2 cubes to shopping cart |
+        | Add 1 sphere to shopping cart |
+        | `Check that` | shopping cart | `contains exactly the items from` | cube | cube | sphere |
+        | `Check that` | shopping cart | `contains exactly the items from` | cube | sphere | cube |
+        _Assumes a 'shopping cart' type to be defined with associated action and observation keywords._
         """
         if isinstance(sequence_right, str):
             sequence_right = [sequence_right]
@@ -263,11 +310,17 @@ class CheckOperator:
     def does_not_contain_item(self, sequence, part):
         """
         Checks whether the right side item is not part of the sequence on the left side.
-        Iterates over the sequence to apply automatic Robot type conversion where applicable.
+        Iterates over the sequence and applies automatic Robot type conversion where applicable.
 
         No plural variant is available for this keyword due to ambiguity with List-like values. When
         writing "[2, 4, 6] does not contain items [4, 5, 6]", one could expect a pass, because the
         set [4, 5, 6] is not contained, but also a fail because item 4 *is* part of the left side set.
+
+        Example:
+        | `Check precondition` | shopping cart | `is empty` |
+        | Add 1 cube to shopping cart |
+        | `Check that` | shopping cart | `does not contain item` | sphere |
+        _Assumes a 'shopping cart' type to be defined with associated action and observation keywords._
         """
         if is_list_like(part):
             raise TypeError("List-like items not accepted as right side value")
