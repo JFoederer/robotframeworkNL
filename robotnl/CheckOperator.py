@@ -195,39 +195,45 @@ class CheckOperator:
     ################################################################################################
     # Operators that work on lists or other sequences
     def is_empty(self, iterable):
-        """Checks whether the sequence on the left does not contain any elements
+        """Checks whether the sequence on the left does not contain any items.
 
         Example:
-        | Take new shopping cart |
-        | `Check that` | shopping cart | `is empty` |
-        _Assumes a 'shopping cart' type to be defined with associated action and observation keywords._
+        | Take a new suitcase |
+        | `Check that` | suitcase | `is empty` |
+        _Assumes a 'box' type to be defined with associated action and observation keywords._
         """
         return len(iterable) == 0
 
-    @keyword("counts ${n} elements")
-    def counts_n_elements(self, n:int, iterable):
-        """Checks whether the sequence on the left counts ${n} elements
+    @keyword("contains ${n} items")
+    def contains_n_items(self, n:int, iterable):
+        """Checks whether the sequence on the left contains ${n} items. Uses python's len-operator
+        to count the number of items.
 
         Example:
-        | `Check precondition` | shopping cart | `is empty` |
-        | Add 1 cube to shopping cart |
-        | Add 1 sphere to shopping cart |
-        | `Check that` | shopping cart | `counts 2 elements` |
-        _Assumes a 'shopping cart' type to be defined with associated action and observation keywords._
+        | `Check precondition` | suitcase | `is empty` |
+        | Put toothbrush into suitcase |
+        | `Check that` | suitcase | `contains 1 item` |
+        | Put t-shirt into suitcase |
+        | `Check that` | suitcase | `contains 2 items` |
+        _Assumes a 'suitcase' type to be defined with associated action and observation keywords._
         """
         count = len(iterable)
-        BuiltIn().log(f"Counted {count} elements")
+        BuiltIn().log(f"Counted {count} items")
         return count == n
+
+    def contains_1_item(self, sequence):
+        return self.contains_n_items(1, sequence)
+    contains_1_item.__doc__ = contains_n_items.__doc__
 
     def contains(self, iterable, part):
         """Checks whether part is present in iterable. Uses Python's primitive in-operator.
 
         Example:
-        | Add 1 cube to shopping cart |
-        | Add 1 sphere to shopping cart |
-        | `Check that` | shopping cart | `contains` | cube |
-        | `Check that` | shopping cart | `contains` | sphere |
-        _Assumes a 'shopping cart' type to be defined with associated action and observation keywords._
+        | Put toothbrush into suitcase |
+        | Put t-shirt into suitcase |
+        | `Check that` | suitcase | `contains` | toothbrush |
+        | `Check that` | suitcase | `contains` | t-shirt |
+        _Assumes a 'suitcase' type to be defined with associated action and observation keywords._
         """
         return part in iterable
 
@@ -235,10 +241,10 @@ class CheckOperator:
         """Checks whether part is present in iterable. Uses Python's primitive 'not in' operator.
 
         Example:
-        | `Check precondition` | shopping cart | `is empty` |
-        | Add 1 cube to shopping cart |
-        | `Check that` | shopping cart | `does not contain` | sphere |
-        _Assumes a 'shopping cart' type to be defined with associated action and observation keywords._
+        | `Check precondition` | suitcase | `is empty` |
+        | Put toothbrush into suitcase |
+        | `Check that` | suitcase | `does not contain` | t-shirt |
+        _Assumes a 'suitcase' type to be defined with associated action and observation keywords._
         """
         return part not in iterable
 
@@ -251,12 +257,12 @@ class CheckOperator:
         item from the left side.
 
         Example:
-        | Add 2 cubes to shopping cart |
-        | Add 1 sphere to shopping cart |
-        | `Check that` | shopping cart | `contains item` | cube |
-        | `Check that` | shopping cart | `contains items` | sphere | cube |
-        | `Check that` | shopping cart's price list | `contains items` | 2.50 | ${1.99} |
-        _Assumes a 'shopping cart' type to be defined with associated action and observation keywords._
+        | Put toothbrush into suitcase |
+        | Put t-shirt into suitcase |
+        | `Check that` | suitcase | `contains item` | toothbrush |
+        | `Check that` | suitcase | `contains items` | t-shirt | toothbrush |
+        | `Check that` | suitcase's lock code | `contains items` | 7 | ${2} |
+        _Assumes a 'suitcase' type to be defined with associated action and observation keywords._
         """
         if not is_list_like(part):
             part = [part]
@@ -279,15 +285,17 @@ class CheckOperator:
         """
         Checks whether the sequence on the right side contains all items of the left side and vice versa.
         Iterates over sequence on the left and matches each element with a single element on the right.
-        The items can be in any order.
+        The items can be in any order. Automatic Robot type conversion is applied when applicable.
 
         Example:
-        | `Check precondition` | shopping cart | `is empty` |
-        | Add 2 cubes to shopping cart |
-        | Add 1 sphere to shopping cart |
-        | `Check that` | shopping cart | `contains exactly the items from` | cube | cube | sphere |
-        | `Check that` | shopping cart | `contains exactly the items from` | cube | sphere | cube |
-        _Assumes a 'shopping cart' type to be defined with associated action and observation keywords._
+        | `Check precondition` | suitcase | `is empty` |
+        | Put toothbrush into suitcase |
+        | Put t-shirt into suitcase |
+        | `Check that` | suitcase | `contains exactly the items from` | toothbrush | t-shirt |
+        | `Check that` | suitcase | `contains exactly the items from` | t-shirt | toothbrush |
+        | `Check that` | my packing list | `contains exactly the items from` | toothbrush | t-shirt |
+        | `Check that` | suitcase | `contains exactly the items from` | my packing list |
+        _Assumes a 'suitcase' type to be defined with associated action and observation keywords._
         """
         if isinstance(sequence_right, str):
             sequence_right = [sequence_right]
@@ -317,10 +325,10 @@ class CheckOperator:
         set [4, 5, 6] is not contained, but also a fail because item 4 *is* part of the left side set.
 
         Example:
-        | `Check precondition` | shopping cart | `is empty` |
-        | Add 1 cube to shopping cart |
-        | `Check that` | shopping cart | `does not contain item` | sphere |
-        _Assumes a 'shopping cart' type to be defined with associated action and observation keywords._
+        | `Check precondition` | suitcase | `is empty` |
+        | Put toothbrush into suitcase |
+        | `Check that` | suitcase | `does not contain item` | t-shirt |
+        _Assumes a 'suitcase' type to be defined with associated action and observation keywords._
         """
         if is_list_like(part):
             raise TypeError("List-like items not accepted as right side value")

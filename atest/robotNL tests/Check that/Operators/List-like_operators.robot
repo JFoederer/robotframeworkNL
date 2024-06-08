@@ -2,17 +2,19 @@
 Resource          base.resource
 
 *** Test Cases ***
-Basic element checks
+Basic item checks
     @{empty_list}=    Create List
     @{animals}=    Create List    Bird    Wolf    Fish
     Check that    ${empty_list}    is empty
     Run Keyword And Expect Error    CheckFailed*    Check that    @{animals}    is empty
-    Check that    @{animals}    counts 3 elements
-    Check that    ${empty_list}    counts 0 elements
-    Check that    one    two    three    counts 3 elements
+    Check that    @{animals}    contains 3 items
+    Check that    ${empty_list}    contains 0 items
+    @{single}=    Create List    one
+    Check that    ${single}    contains 1 item
+    Check that    one    two    three    contains 3 items
     VAR    ${three}    3
-    Check that    @{animals}    counts ${three} elements
-    Run Keyword And Expect Error    ValueError*    Check that    @{animals}    counts three elements
+    Check that    @{animals}    contains ${three} items
+    Run Keyword And Expect Error    ValueError*    Check that    @{animals}    contains three items
     Check that    @{animals}    contains    Wolf
     Run Keyword And Expect Error    CheckFailed*    Check that    @{animals}    contains    WOLF
     Run Keyword And Expect Error    CheckFailed*    Check that    @{animals}    contains    Bird    Wolf
@@ -37,12 +39,13 @@ contains exactly the items from
     @{animals}=    Create List    Bird    Wolf    Fish
     Check that    ${animals}    contains exactly the items from    Bird    Wolf    Fish
     Check that    ${animals}    contains exactly the items from    Wolf    Fish    Bird
+    Check that    ${animals}    contains exactly the items from    BIRD    WOLF    FISH
     Check that    ${animals}    contains exactly the items from    ${animals}
     Check that    ${animals}    contains exactly the items from    @{animals}
     Check that    @{animals}    contains exactly the items from    @{animals}
     Check that    @{animals}    contains exactly the items from    ${animals}
-    @{short_list}=    Create List    Single element
-    Check that    ${short_list}    contains exactly the items from    Single element
+    @{short_list}=    Create List    Single item
+    Check that    ${short_list}    contains exactly the items from    Single item
     @{empty_list}=    Create List
     Check that    ${empty_list}    contains exactly the items from    ${empty_list}
     Check that    item1    item2    contains exactly the items from    item2    item1
