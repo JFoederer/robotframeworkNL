@@ -78,7 +78,7 @@ class CheckOperator:
         return OperatorProxy(">").basicOperator(lValue, rValue)
 
     def is_less_than_or_equal_to(self, lValue, rValue):
-        """Checks whether the left side `is less than or equal` to the right side [`≤`]
+        """Checks whether the left side `is less than or equal to` the right side [`≤`]
 
         Applies Robot type conversions when executing the check.
         Examples:
@@ -194,7 +194,7 @@ class CheckOperator:
 
     ################################################################################################
     # Operators that work on lists or other sequences
-    def is_empty(self, iterable):
+    def is_empty(self, sequence):
         """Checks whether the sequence on the left does not contain any items.
 
         Example:
@@ -202,10 +202,10 @@ class CheckOperator:
         | `Check that` | suitcase | `is empty` |
         _Assumes a 'box' type to be defined with associated action and observation keywords._
         """
-        return len(iterable) == 0
+        return len(sequence) == 0
 
     @keyword("contains ${n} items")
-    def contains_n_items(self, n:int, iterable):
+    def contains_n_items(self, n:int, sequence):
         """Checks whether the sequence on the left contains ${n} items. Uses python's len-operator
         to count the number of items.
 
@@ -217,7 +217,7 @@ class CheckOperator:
         | `Check that` | suitcase | `contains 2 items` |
         _Assumes a 'suitcase' type to be defined with associated action and observation keywords._
         """
-        count = len(iterable)
+        count = len(sequence)
         BuiltIn().log(f"Counted {count} items")
         return count == n
 
@@ -225,8 +225,8 @@ class CheckOperator:
         return self.contains_n_items(1, sequence)
     contains_1_item.__doc__ = contains_n_items.__doc__
 
-    def contains(self, iterable, part):
-        """Checks whether part is present in iterable. Uses Python's primitive in-operator.
+    def contains(self, sequence, part):
+        """Checks whether part is present in sequence. Uses Python's primitive in-operator.
 
         Example:
         | Put toothbrush into suitcase |
@@ -235,10 +235,10 @@ class CheckOperator:
         | `Check that` | suitcase | `contains` | t-shirt |
         _Assumes a 'suitcase' type to be defined with associated action and observation keywords._
         """
-        return part in iterable
+        return part in sequence
 
-    def does_not_contain(self, iterable, part):
-        """Checks whether part is present in iterable. Uses Python's primitive 'not in' operator.
+    def does_not_contain(self, sequence, part):
+        """Checks whether part is present in sequence. Uses Python's primitive 'not in' operator.
 
         Example:
         | `Check precondition` | suitcase | `is empty` |
@@ -246,7 +246,7 @@ class CheckOperator:
         | `Check that` | suitcase | `does not contain` | t-shirt |
         _Assumes a 'suitcase' type to be defined with associated action and observation keywords._
         """
-        return part not in iterable
+        return part not in sequence
 
     def contains_item(self, sequence, part):
         """Checks whether the right side item(s) is/are part of the sequence on the left side.
