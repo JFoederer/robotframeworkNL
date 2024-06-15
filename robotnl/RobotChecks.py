@@ -113,13 +113,13 @@ class RobotChecks:
 
         Examples:
         | `Check that` | 3 | `=` | 3 |
-        | `Check that` | Two times | 6 | `equals` | 12 |
-        | `Check that` | Two times | 5 | `≠` | Two times | 7 |
-        | `Check that` | Earth exists |
+        | `Check that` | _Two times_ | 6 | `equals` | 12 |
+        | `Check that` | _Two times_ | 5 | `≠` | _Two times_ | 7 |
+        | `Check that` | _Earth exists_ |
 
         'Two times' in these examples is assumed to be defined as a Robot keyword that takes one
-        argument and multiplies it by 2. Check that will pass if the evaluated result of Two times 6
-        equals the fixed expected value 12.
+        argument and multiplies it by 2. `Check that` will pass if the evaluated result of _Two
+        times_ 6 equals the fixed expected value 12.
 
         *Adding time constraints*:\n
                 Any check can be extended with an additional timing constraint by adding ``within``
@@ -127,13 +127,13 @@ class RobotChecks:
                 the specified time has passed. In the latter case the test case will fail.
 
         Example with time constraint:
-        | `Check that` | condition is true | within | 1 minute 30 seconds |
+        | `Check that` | _condition is true_ | within | 1 minute 30 seconds |
 
         Elevator example:
-        | `Check that` | elevator doors are closed |
-        | Request elevator at floor | 3 |
-        | `Check that` | elevator floor | `equals` | 3 | within | 20 seconds |
-        | `Check that` | offset to floor level in mm | `≤` | 5 | within | 3 seconds |
+        | `Check that` | _elevator doors are closed_ |
+        | _Request elevator at floor_ | 3 |
+        | `Check that` | _elevator floor_ | `equals` | 3 | within | 20 seconds |
+        | `Check that` | _offset to floor level in mm_ | `≤` | 5 | within | 3 seconds |
         """
         return RobotChecks.__execute_check("Requirement", *args)
 
