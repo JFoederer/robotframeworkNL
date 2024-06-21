@@ -78,7 +78,7 @@ class RobotChecks:
         except CheckFailed as failure:
             failure.ROBOT_CONTINUE_ON_FAILURE = False
             raise failure
-    RUN_KW_REGISTER.register_run_keyword('robotnl', check_precondition.__name__, args_to_process=0)
+    RUN_KW_REGISTER.register_run_keyword('robotnl', check_precondition.__name__, args_to_process=0, deprecation_warning=False)
 
     def check_postcondition(self, *args):
         """
@@ -95,7 +95,7 @@ class RobotChecks:
         except CheckFailed as failure:
             failure.ROBOT_CONTINUE_ON_FAILURE = False
             raise failure
-    RUN_KW_REGISTER.register_run_keyword('robotnl', check_postcondition.__name__, args_to_process=0)
+    RUN_KW_REGISTER.register_run_keyword('robotnl', check_postcondition.__name__, args_to_process=0, deprecation_warning=False)
 
     def check_that(self, *args):
         """
@@ -139,7 +139,7 @@ class RobotChecks:
         | `Check that` | _offset to floor level in mm_ | `≤` | 5 | within | 3 seconds |
         """
         return RobotChecks.__execute_check("Requirement", *args)
-    RUN_KW_REGISTER.register_run_keyword('robotnl', check_that.__name__, args_to_process=0)
+    RUN_KW_REGISTER.register_run_keyword('robotnl', check_that.__name__, args_to_process=0, deprecation_warning=False)
 
     def check_manual(self, checkRequestText=""):
         """
