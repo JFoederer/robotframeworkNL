@@ -44,7 +44,7 @@ bool comparisons
     Check that    false    equals    ${False}
     Check that    ${False}    equals    False
     Run Keyword And Expect Error    CheckFailed: Requirement check on 'False'    Check That    False
-    Run Keyword And Expect Error    CheckFailed: Requirement check on 'False'    Check That    ${False}
+    Run Keyword And Expect Error    CheckFailed: Requirement check on '\${False}*    Check That    ${False}
     Run Keyword And Expect Error    CheckFailed: Requirement check on 'Random text'    Check That    Random text
     Run Keyword And Expect Error    CheckFailed: Requirement check on 'PASS'    Check That    PASS
     Run Keyword And Expect Error    CheckFailed: Requirement check on 'yes'    Check that    yes
