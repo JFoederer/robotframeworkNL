@@ -39,3 +39,8 @@ objects in operand keywords
     Check That    The item in Toy box that lies on top    Equals    Model car
     Check That    The item in the box that lies on top    Equals    Model car
     Check That    The item in ${toy box} that lies on top    Equals    Model car
+
+objects directly in operand
+    [Setup]    Prepare boxes
+    Check That    the box labeled    Toy Box    equals    ${toy box}
+    Check That    ${toy box}    equals    the box labeled    Toy Box
