@@ -8,9 +8,17 @@ without typing
     ${value}=    echo    twelve
     Should be equal    ${value}    ${12}
 
-with typing
+with int typing
     ${value}=    echo int    twelve
-    Should be equal    ${value}    ${12}
+    Should be equal    ${value}    ${12}    type=int
+
+with float typing
+    ${value}=    echo float    three quarters
+    Should be equal    ${value}    ${0.75}    type=float
+
+with return type conversion
+    ${value}=    echo float    twelve
+    Should be equal    ${value}    ${12.0}    type=float
 
 with wrong type
     Run Keyword And Expect Error    REGEXP: .*cannot be converted to integer or keyword returning integer.    echo int    three quarters

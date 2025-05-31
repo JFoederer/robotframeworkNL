@@ -15,9 +15,13 @@ class inline_kw_args:
     @keyword(name="echo")
     def mirror(self, arg):
         return arg
-        
+
     @keyword(name="echo int")
-    def mirror_typed(self, arg:int):
+    def mirror_int(self, arg:int):
+        return arg
+
+    @keyword(name="echo float")
+    def mirror_float(self, arg:float):
         return arg
 
     @keyword(name="arg stuff")
