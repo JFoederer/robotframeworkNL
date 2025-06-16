@@ -24,6 +24,10 @@ class inline_kw_args:
     def mirror_float(self, arg:float):
         return arg
 
+    @keyword(name="echo none")
+    def mirror_none(self, arg:None):
+        return arg
+
     @keyword(name="arg stuff")
     def arg_stuff(self, one, two='two', three='three'):
         Robot.log_many(one, two, three)

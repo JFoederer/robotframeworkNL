@@ -20,8 +20,11 @@ with return type conversion
     ${value}=    echo float    twelve
     Should be equal    ${value}    ${12.0}    type=float
 
-with wrong type
-    Run Keyword And Expect Error    REGEXP: .*cannot be converted to integer or keyword returning integer.    echo int    three quarters
+with wrong type int
+    Run Keyword And Expect Error    REGEXP: .*cannot be converted to integer or inline keyword\\[int\\].    echo int    three quarters
+
+with wrong type none
+    Run Keyword And Expect Error    REGEXP: .*cannot be converted to None or inline keyword\\[None\\].    echo none    three quarters
 
 string should stay a string
     ${value}=    echo    not a keyword

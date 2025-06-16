@@ -32,8 +32,8 @@
 
 from robot.libraries.BuiltIn import BuiltIn
 from robot.api.deco import keyword as robot_keyword
-from robot.utils import type_name
-from robot.running.arguments import TypeConverter
+from robot.api.deco import register_converter
+from robot.api import TypeInfo
 
 from functools import wraps
 from typing import TypeVar, Generic, Union
@@ -82,39 +82,22 @@ class InlineKeyword(Generic[TypeVar('T')]):
     """
 
 
-# work around for Libdoc
-try:
-    from robot.libdocpkg.standardtypes import STANDARD_TYPE_DOCS
-    STANDARD_TYPE_DOCS[InlineKeyword] = InlineKeyword.__doc__
-except:
-    pass
-
-
-@TypeConverter.register
-class InlineKeywordConverter(TypeConverter):
-    type = InlineKeyword
-    type_name = 'InlineKeyword'
-
-    def __init__(self, type_info, custom_converters=None, languages=None):
-        super().__init__(type_info, custom_converters, languages)
-        self.converter = self.converter_for(self.type_info.nested[0])
-        self.type_name = f"keyword returning {type_name(self.type_info.nested[0].type)}"
-
-    def _convert(self, value):
-        if not is_keyword(value):
-            raise ValueError
-        BuiltIn().log(f"Evaluating argument as keyword [{value}]")
-        result = BuiltIn().run_keyword(value)
-        BuiltIn().log(f"{value} → {result}")
-        if self.converter:
-            # Convert the return type of the keyword to the expected type
-            try:
-                result = self.converter.convert(result, f"result of: {value}")
-            except ValueError as err:
-                BuiltIn().log(f"Incorrect keyword return type: {err}")
-                raise
-
-        return result
+@register_converter(InlineKeyword, type_name='inline keyword')
+def inlinekeyword_converter(value, type_info):
+    if not is_keyword(value):
+        raise ValueError
+    BuiltIn().log(f"Evaluating argument as keyword [{value}]")
+    result = BuiltIn().run_keyword(value)
+    BuiltIn().log(f"{value} → {result}")
+    converter = TypeInfo.from_type_hint(type_info.nested[0])
+    if converter:
+        # Convert the return type of the keyword to the expected type
+        try:
+            result = converter.convert(result, f"result of: {value}")
+        except ValueError as err:
+            BuiltIn().log(f"Incorrect keyword return type: {err}")
+            raise
+    return result
 
 
 def keyword(name=None, tags=(), types=()):
