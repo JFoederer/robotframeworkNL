@@ -1,6 +1,6 @@
 *** Settings ***
 Resource          base.resource
-Library           timed_keywords.py
+
 
 *** Test Cases ***
 Single action passes within time span
@@ -25,9 +25,3 @@ Polling action keeps failing within time span
 Invalid time string
     Run keyword and expect error    *Invalid time string*
     ...                             Check that    ${True}    within    the blink of an eye
-
-
-*** Keywords ***
-a delay of ${timespan} completes
-    Sleep    ${timespan}
-    RETURN    ${True}

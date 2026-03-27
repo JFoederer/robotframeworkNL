@@ -49,6 +49,7 @@ class RobotChecks:
     ROBOT_LIBRARY_SCOPE = "GLOBAL"
     def __init__(self):
         self.__gui = None
+        self.running_timespan_end = None
 
     @property
     def _gui(self):
@@ -74,7 +75,7 @@ class RobotChecks:
         point where it was able to check the requirement it was testing for.
         """
         try:
-            return RobotChecks.__execute_check("Precondition", *args)
+            return self.__execute_check("Precondition", *args)
         except CheckFailed as failure:
             failure.ROBOT_CONTINUE_ON_FAILURE = False
             raise failure
@@ -91,7 +92,7 @@ class RobotChecks:
         the cause of failure.
         """
         try:
-            return RobotChecks.__execute_check("Postcondition", *args)
+            return self.__execute_check("Postcondition", *args)
         except CheckFailed as failure:
             failure.ROBOT_CONTINUE_ON_FAILURE = False
             raise failure
@@ -138,7 +139,7 @@ class RobotChecks:
         | `Check that` | _elevator floor_ | `equals` | 3 | within | 20 seconds |
         | `Check that` | _offset to floor level in mm_ | `≤` | 5 | within | 3 seconds |
         """
-        return RobotChecks.__execute_check("Requirement", *args)
+        return self.__execute_check("Requirement", *args)
     RUN_KW_REGISTER.register_run_keyword('robotnl', check_that.__name__, args_to_process=0, deprecation_warning=False)
 
     def check_manual(self, checkRequestText=""):
@@ -210,8 +211,7 @@ class RobotChecks:
                 except Exception as e:
                     BuiltIn().log_to_console("Error in interactive keyword '%s'\n\n%s" % (newInput, e))
 
-    @staticmethod
-    def __execute_check(checkType, *args):
+    def __execute_check(self, checkType, *args):
         """
         Parse arguments for check keyword to determine its operands, evaluate them and execute the
         check.
@@ -223,11 +223,21 @@ class RobotChecks:
         TimeOutInSeconds = 0
         TimeRemaining = True
         s_TimeConstraint = ""
+        StartTime = time.perf_counter()
         if len(Arguments) >= 2 and str(Arguments[-2]).lower() == 'within':
-            EvaluatedTimeArg = RobotChecks.__evaluateOperand([Arguments[-1]])[0]
-            TimeOutInSeconds = timestr_to_secs(EvaluatedTimeArg)
+            if Arguments[-1].lower() == 'same timespan':
+                if self.running_timespan_end is None:
+                    BuiltIn().fail("Joint timespan expected, but was not set before this check.")
+                TimeOutInSeconds = round(self.running_timespan_end - time.perf_counter(), ndigits=3)
+            else:
+                EvaluatedTimeArg = RobotChecks.__evaluateOperand([Arguments[-1]])[0]
+                TimeOutInSeconds = timestr_to_secs(EvaluatedTimeArg)
             s_TimeConstraint = Arguments[-1]
             Arguments = Arguments[:-2]
+            self.running_timespan_end = StartTime + TimeOutInSeconds
+        else:
+            # Checks without time contraint end any running timespan
+            self.running_timespan_end = None
 
         if not len(Arguments):
             BuiltIn().fail("%s check failed. There was nothing to check." % checkType)
@@ -263,8 +273,6 @@ class RobotChecks:
         # Evaluate expression
         EvaluatedResult = None
 
-        StartTime = time.perf_counter()
-        TimeLeft = TimeOutInSeconds
         PollMax = 20 # After 20s people start wondering: "Is it still going?" Time for an update.
         PollMin = min(PollMax/8, TimeOutInSeconds*3/100) # Shortest delay is 3% of the target time.
         PollDelay = PollMin # Initial poll delay will be 2x PollMin
