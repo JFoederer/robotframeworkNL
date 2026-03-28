@@ -1,6 +1,6 @@
 *** Settings ***
 Resource          ../base.resource
-Library           timed_keywords.py
+Library           helper_keywords.py
 
 
 *** Keywords ***

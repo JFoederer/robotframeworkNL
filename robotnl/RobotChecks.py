@@ -48,8 +48,25 @@ class CheckFailed(RuntimeError):
 class RobotChecks:
     ROBOT_LIBRARY_SCOPE = "GLOBAL"
     def __init__(self):
+        self.ROBOT_LIBRARY_LISTENER = self
         self.__gui = None
-        self.running_timespan_end = None
+        self.scope_depth = 0
+        self.nested_timespans = {}
+
+    def _start_suite(self, data, result):
+        self.scope_depth = 0
+        self.nested_timespans = {}
+    _end_suite = _start_suite
+
+    def _start_keyword(self, data, result):
+        self.scope_depth += 1
+
+    def _end_keyword(self, data, result):
+        if self.scope_depth + 1 in self.nested_timespans:
+            # use depth+1 because 'check that' itself is also a keyword. The +1
+            # keeps all check thats on the same level grouped.
+            self.nested_timespans.pop(self.scope_depth + 1)
+        self.scope_depth -= 1
 
     @property
     def _gui(self):
@@ -225,19 +242,21 @@ class RobotChecks:
         s_TimeConstraint = ""
         StartTime = time.perf_counter()
         if len(Arguments) >= 2 and str(Arguments[-2]).lower() == 'within':
+            running_timespan_end = self.nested_timespans.get(self.scope_depth)
             if Arguments[-1].lower() == 'same timespan':
-                if self.running_timespan_end is None:
+                if running_timespan_end is None:
                     BuiltIn().fail("Joint timespan expected, but was not set before this check.")
-                TimeOutInSeconds = round(self.running_timespan_end - time.perf_counter(), ndigits=3)
+                TimeOutInSeconds = round(running_timespan_end - time.perf_counter(), ndigits=3)
             else:
                 EvaluatedTimeArg = RobotChecks.__evaluateOperand([Arguments[-1]])[0]
                 TimeOutInSeconds = timestr_to_secs(EvaluatedTimeArg)
             s_TimeConstraint = Arguments[-1]
             Arguments = Arguments[:-2]
-            self.running_timespan_end = StartTime + TimeOutInSeconds
+            self.nested_timespans[self.scope_depth] = StartTime + TimeOutInSeconds
         else:
             # Checks without time contraint end any running timespan
-            self.running_timespan_end = None
+            if self.scope_depth in self.nested_timespans:
+                self.nested_timespans.pop(self.scope_depth)
 
         if not len(Arguments):
             BuiltIn().fail("%s check failed. There was nothing to check." % checkType)
