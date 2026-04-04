@@ -5,7 +5,7 @@ Resource          base.resource
 *** Test Cases ***
 The first check in a suite cannot refer to 'same timespan'
     TRY
-        Check that    ${True}    within    same timespan
+        Check that    True    within    same timespan
     EXCEPT    Joint timespan expected, but was not set*    type=GLOB
         No Operation
     ELSE
@@ -44,16 +44,10 @@ A timespan can carry over to the next Test
         Fail    Expected fail did not occur
     END
 
-A check without time constraint ends the running timespan
+A check without time constraint does not end the running timespan
     Check that    a delay of 10ms completes    within    100ms
-    Check that    ${True}
-    TRY
-        Check that    a delay of 10ms completes    within    same timespan
-    EXCEPT    Joint timespan expected, but was not set*    type=GLOB
-        No Operation
-    ELSE
-        Fail    Expected fail did not occur
-    END
+    Check that    True
+    Check that    a delay of 10ms completes    within    same timespan
 
 Timespans can be reused inside control structures
     Check that    a delay of 10ms completes    within    100ms
@@ -89,7 +83,7 @@ Keywords do not affect the timespan of the Test
     Check that    a delay of 20ms completes    within    same timespan
 
 Keywords do not have access to the timespan of the calling test
-    Check that    ${True}    within    100ms
+    Check that    True    within    100ms
     TRY
         Keyword that tries to use existing timespan
     EXCEPT    Joint timespan expected, but was not set*    type=GLOB
@@ -99,12 +93,12 @@ Keywords do not have access to the timespan of the calling test
     END
 
 Keywords do not affect the timespan of other keywords
-    Check that    ${True}    # Ends any running timespan
+    Check that    True    within    50ms
     Nested keyword that uses check within
     TRY
-        Check that    a delay of 10ms completes    within    same timespan
-    EXCEPT    Joint timespan expected, but was not set*    type=GLOB
-        Comment    Would not have failed if the nested keyword's timespan were accessable
+        Check that    True    within    same timespan
+    EXCEPT    *too late*    type=GLOB
+        Comment    Timespan already passed during the nested keyword
     ELSE
         Fail    Expected fail did not occur
     END
@@ -112,7 +106,7 @@ Keywords do not affect the timespan of other keywords
 
 *** Keywords ***
 Keyword that uses a shorter check within
-    Check that    ${True}    within    10ms
+    Check that    True    within    10ms
 
 Keyword that tries to use existing timespan
     Check that    a delay of 10ms completes    within    same timespan

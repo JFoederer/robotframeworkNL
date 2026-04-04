@@ -253,10 +253,6 @@ class RobotChecks:
             s_TimeConstraint = Arguments[-1]
             Arguments = Arguments[:-2]
             self.nested_timespans[self.scope_depth] = StartTime + TimeOutInSeconds
-        else:
-            # Checks without time contraint end any running timespan
-            if self.scope_depth in self.nested_timespans:
-                self.nested_timespans.pop(self.scope_depth)
 
         if not len(Arguments):
             BuiltIn().fail("%s check failed. There was nothing to check." % checkType)
