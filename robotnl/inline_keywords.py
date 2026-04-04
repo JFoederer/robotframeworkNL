@@ -35,6 +35,7 @@ from robot.api.deco import keyword as robot_keyword
 from robot.utils import type_name
 from robot.running.arguments import TypeConverter
 
+from annotationlib import get_annotations, Format
 from functools import wraps
 from typing import TypeVar, Generic, Union
 
@@ -102,7 +103,7 @@ class InlineKeywordConverter(TypeConverter):
 
     def _convert(self, value):
         if not is_keyword(value):
-            raise ValueError
+            raise ValueError("Not a keyword")
         BuiltIn().log(f"Evaluating argument as keyword [{value}]")
         result = BuiltIn().run_keyword(value)
         BuiltIn().log(f"{value} → {result}")
@@ -116,11 +117,16 @@ class InlineKeywordConverter(TypeConverter):
 
         return result
 
-
 def keyword(name=None, tags=(), types=()):
     def decorator(func):
-        for var, type_ in func.__annotations__.items():
-            func.__annotations__[var] = Union[type_, InlineKeyword[type_]]
+        annotations = get_annotations(func, format=Format.VALUE)
+        for var, type_ in annotations.items():
+            annotations[var] = Union[type_, InlineKeyword[type_]]
+
+        def new_annotate(self, format=Format.VALUE):
+            return annotations
+        func.__annotate__ = new_annotate
+
         @robot_keyword(name, tags, types)
         @wraps(func)
         def wrapped(*args, **kwargs):
