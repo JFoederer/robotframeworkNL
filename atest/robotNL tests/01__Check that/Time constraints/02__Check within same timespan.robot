@@ -103,6 +103,43 @@ Keywords do not affect the timespan of other keywords
         Fail    Expected fail did not occur
     END
 
+Reporting shows the original timespan
+    Check that    True    within    10ms
+    TRY
+        Check that    False    within    same timespan
+    EXCEPT    *within 10ms*    type=GLOB
+        Comment    Note that the original text is kept, so '10ms' instead of the formatted '10 milliseconds'
+    ELSE
+        Fail    Expected fail did not occur
+    END
+
+Reporting shows the original timespan including the keyword that produced it
+    Check that    True    within    1/100th of a second
+    TRY
+        Check that    False    within    same timespan
+    EXCEPT    *within 1/100th of a second [[]10 milliseconds[]]*    type=GLOB
+        Comment    Reports the keyword with its resulting value formatted between brackets
+    ELSE
+        Fail    Expected fail did not occur
+    END
+
+Errors in timespan cancel the running timespan
+    Check that    True    within    10ms
+    TRY
+        Check that    True    within    not a timespan
+    EXCEPT    *Invalid time string 'My object'.*    type=GLOB
+        No Operation
+    ELSE
+        Fail    Expected fail did not occur
+    END
+    TRY
+        Check that    True    within    same timespan
+    EXCEPT    Joint timespan expected, but was not set*    type=GLOB
+        No Operation
+    ELSE
+        Fail    Expected fail did not occur
+    END
+
 
 *** Keywords ***
 Keyword that uses a shorter check within

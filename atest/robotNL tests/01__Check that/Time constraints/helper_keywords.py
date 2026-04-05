@@ -29,3 +29,14 @@ class HelperKeywords:
     @keyword("counter value")
     def counter_value(self):
         return self.counter
+
+    @keyword("1/100th of a second")
+    def timespan_keyword(self):
+        return '0.01 sec'
+
+    @keyword("Not a timespan")
+    def return_object(self):
+        class MyObject:
+            def __str__(self):
+                return 'My object'
+        return MyObject()

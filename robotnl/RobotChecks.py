@@ -242,17 +242,37 @@ class RobotChecks:
         s_TimeConstraint = ""
         StartTime = time.perf_counter()
         if len(Arguments) >= 2 and str(Arguments[-2]).lower() == 'within':
-            running_timespan_end = self.nested_timespans.get(self.scope_depth)
-            if Arguments[-1].lower() == 'same timespan':
+            timearg = Arguments[-1]
+            running_timespan_end, s_TimeConstraint = self.nested_timespans.get(self.scope_depth, (None, ''))
+            if str(timearg).lower() == 'same timespan':
                 if running_timespan_end is None:
                     BuiltIn().fail("Joint timespan expected, but was not set before this check.")
                 TimeOutInSeconds = round(running_timespan_end - time.perf_counter(), ndigits=3)
+
+                # Report timespan reuse
+                if TimeOutInSeconds < 0:
+                    remaining = '0 seconds'
+                elif TimeOutInSeconds > 5:
+                    # skip milliseconds for larger timespans
+                    remaining = secs_to_timestr(round(TimeOutInSeconds))
+                else:
+                    remaining = secs_to_timestr(TimeOutInSeconds)
+                BuiltIn().log(f"Reusing joint timespan: {s_TimeConstraint}\n"
+                              f"Must complete within the remaining {remaining}.")
             else:
-                EvaluatedTimeArg = RobotChecks.__evaluateOperand([Arguments[-1]])[0]
-                TimeOutInSeconds = timestr_to_secs(EvaluatedTimeArg)
-            s_TimeConstraint = Arguments[-1]
+                try:
+                    EvaluatedTimeArg, s_TimeConstraint = RobotChecks.__evaluateOperand([timearg])
+                    TimeOutInSeconds = timestr_to_secs(EvaluatedTimeArg)
+                except:
+                    # End any running timespan on error
+                    if self.scope_depth in self.nested_timespans:
+                        self.nested_timespans.pop(self.scope_depth)
+                    raise
+                if is_keyword(timearg):
+                    s_TimeConstraint = f"{timearg} [{secs_to_timestr(TimeOutInSeconds)}]"
+
             Arguments = Arguments[:-2]
-            self.nested_timespans[self.scope_depth] = StartTime + TimeOutInSeconds
+            self.nested_timespans[self.scope_depth] = (StartTime + TimeOutInSeconds, s_TimeConstraint)
 
         if not len(Arguments):
             BuiltIn().fail("%s check failed. There was nothing to check." % checkType)
@@ -335,7 +355,7 @@ class RobotChecks:
             ReportString = f"{checkType} check on '{s_LeftOperand} {OperatorKeyword} {s_RightOperand}'"
 
         if s_TimeConstraint:
-            ReportString += " within %s" % secs_to_timestr(TimeOutInSeconds)
+            ReportString += f" within {s_TimeConstraint}"
             if not TimeRemaining and EvaluatedResult == "passed":
                 ReportString += " (too late)"
                 raise CheckFailed(ReportString)
