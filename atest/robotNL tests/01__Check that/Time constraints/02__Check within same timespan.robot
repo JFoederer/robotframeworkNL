@@ -140,6 +140,17 @@ Errors in timespan cancel the running timespan
         Fail    Expected fail did not occur
     END
 
+Timespan is kept from the first instance
+    Check that    a delay of 50ms completes    within    100ms
+    Check that    a delay of 10ms completes    within    same timespan
+    TRY
+        Check postcondition    a delay of 50ms completes    within    same timespan
+    EXCEPT    *too late*    type=GLOB
+        Comment    Would not have failed if the timer were reset at the first 'same timespan'
+    ELSE
+        Fail    Expected fail did not occur
+    END
+
 
 *** Keywords ***
 Keyword that uses a shorter check within
