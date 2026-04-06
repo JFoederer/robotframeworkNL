@@ -2,7 +2,7 @@ from robot.api.deco import library, keyword
 
 
 @library
-class HelperKeywords:
+class helper_keywords:
     def __init__(self):
         self.gen = self._fail_fail_pass_generator()
         self.counter = 0
