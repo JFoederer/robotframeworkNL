@@ -126,16 +126,19 @@ class RobotChecks:
         Check that has two basic forms.
         - A single keyword (with its arguments) can be evaluated to a truth value
         - Two values or keywords (with their arguments) can be evaluated using an operator. It will
-          then have the form Check that ``<keyword or value>`` ``<operator>`` ``<keyword or value>``.
+          then have the form: Check that ``<keyword or value>`` ``<operator>`` ``<keyword or value>``.
 
-        Operator can be any Robot keyword taking exactly two values (left and right operands) as
-        input. A number of predefined operators on numeric, string and list types are included in
-        this library.
+        Operator can be any Robot keyword taking at least one argument as input. The first argument is
+        placed on the left side of the operator, the left operand. Any following arguments are placed
+        to the right of the operator and form the right operands. A keyword with its argument values is
+        treated as a single operand. A number of predefined operators on numeric, string and list types
+        are included in this library.
 
         Examples:
         | `Check that` | 3 | `=` | 3 |
         | `Check that` | _Two times_ | 6 | `equals` | 12 |
         | `Check that` | _Two times_ | 5 | `≠` | _Two times_ | 7 |
+        | `Check that` | _the shoe box_ | _contains 2 items_ |
         | `Check that` | _Earth exists_ |
 
         'Two times' in these examples is assumed to be defined as a Robot keyword that takes one
@@ -147,14 +150,23 @@ class RobotChecks:
                 This will cause the condition to be reevaluated until it becomes true, or until
                 the specified time has passed. In the latter case the test case will fail.
 
+                Multiple checks can be linked to the same time constraint by using ``same timespan``
+                as the time contraint value. Suppose the previous time contraint was 5 seconds and
+                that check took 2 seconds to complete. If the next check uses
+                ``within    same timespan``, then this check has the remaing 3 seconds to complete.
+
         Example with time constraint:
         | `Check that` | _condition is true_ | within | 1 minute 30 seconds |
 
         Elevator example:
-        | `Check that` | _elevator doors are closed_ |
         | _Request elevator at floor_ | 3 |
-        | `Check that` | _elevator floor_ | `equals` | 3 | within | 20 seconds |
-        | `Check that` | _offset to floor level in mm_ | `≤` | 5 | within | 3 seconds |
+        | `Check that` | _elevator doors are closed_ | within | 20 seconds |
+        | `Check that` | _elevator floor_ | `equals` | 3 | within | 1 minute |
+        | `Check that` | _elevator doors are opened_ | within | same timespan |
+
+        In the elevator example, the doors should be closed within 20 seconds after requesting a
+        floor. Then the elevator can take a maximum of 1 minute to reach the floor and open its
+        doors. `Check that` will continue as soon as the condition is detected.
         """
         return self.__execute_check("Requirement", *args)
     RUN_KW_REGISTER.register_run_keyword('robotnl', check_that.__name__, args_to_process=0, deprecation_warning=False)
