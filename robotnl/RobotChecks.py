@@ -402,6 +402,6 @@ class RobotChecks:
     @staticmethod
     def _human_time(time_in_seconds: float):
         """return a human readable string for a time in seconds"""
-        SKIP_MILLI = 5  # Do not report milliseconds for timespans above SKIP_MILLI seconds
-        rounded_time = round(time_in_seconds, ndigits=0 if time_in_seconds > SKIP_MILLI else 3)
+        SKIP_MILLI = 10  # Do not report milliseconds for timespans above SKIP_MILLI seconds
+        rounded_time = int(time_in_seconds) if time_in_seconds > SKIP_MILLI else round(time_in_seconds, ndigits=3)
         return secs_to_timestr(rounded_time)
