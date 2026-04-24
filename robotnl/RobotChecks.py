@@ -48,7 +48,25 @@ class CheckFailed(RuntimeError):
 class RobotChecks:
     ROBOT_LIBRARY_SCOPE = "GLOBAL"
     def __init__(self):
+        self.ROBOT_LIBRARY_LISTENER = self
         self.__gui = None
+        self.scope_depth = 0
+        self.nested_timespans = {}
+
+    def _start_suite(self, data, result):
+        self.scope_depth = 0
+        self.nested_timespans = {}
+    _end_suite = _start_suite
+
+    def _start_keyword(self, data, result):
+        self.scope_depth += 1
+
+    def _end_keyword(self, data, result):
+        if self.scope_depth + 1 in self.nested_timespans:
+            # use depth+1 because 'check that' itself is also a keyword. The +1
+            # keeps all check thats on the same level grouped.
+            self.nested_timespans.pop(self.scope_depth + 1)
+        self.scope_depth -= 1
 
     @property
     def _gui(self):
@@ -74,7 +92,7 @@ class RobotChecks:
         point where it was able to check the requirement it was testing for.
         """
         try:
-            return RobotChecks.__execute_check("Precondition", *args)
+            return self.__execute_check("Precondition", *args)
         except CheckFailed as failure:
             failure.ROBOT_CONTINUE_ON_FAILURE = False
             raise failure
@@ -91,7 +109,7 @@ class RobotChecks:
         the cause of failure.
         """
         try:
-            return RobotChecks.__execute_check("Postcondition", *args)
+            return self.__execute_check("Postcondition", *args)
         except CheckFailed as failure:
             failure.ROBOT_CONTINUE_ON_FAILURE = False
             raise failure
@@ -108,16 +126,19 @@ class RobotChecks:
         Check that has two basic forms.
         - A single keyword (with its arguments) can be evaluated to a truth value
         - Two values or keywords (with their arguments) can be evaluated using an operator. It will
-          then have the form Check that ``<keyword or value>`` ``<operator>`` ``<keyword or value>``.
+          then have the form: Check that ``<keyword or value>`` ``<operator>`` ``<keyword or value>``.
 
-        Operator can be any Robot keyword taking exactly two values (left and right operands) as
-        input. A number of predefined operators on numeric, string and list types are included in
-        this library.
+        Operator can be any Robot keyword taking at least one argument as input. The first argument is
+        placed on the left side of the operator, the left operand. Any following arguments are placed
+        to the right of the operator and form the right operands. A keyword with its argument values is
+        treated as a single operand. A number of predefined operators on numeric, string and list types
+        are included in this library.
 
         Examples:
         | `Check that` | 3 | `=` | 3 |
         | `Check that` | _Two times_ | 6 | `equals` | 12 |
         | `Check that` | _Two times_ | 5 | `≠` | _Two times_ | 7 |
+        | `Check that` | _the shoe box_ | _contains 2 items_ |
         | `Check that` | _Earth exists_ |
 
         'Two times' in these examples is assumed to be defined as a Robot keyword that takes one
@@ -129,16 +150,25 @@ class RobotChecks:
                 This will cause the condition to be reevaluated until it becomes true, or until
                 the specified time has passed. In the latter case the test case will fail.
 
+                Multiple checks can be linked to the same time constraint by using ``same timespan``
+                as the time contraint value. Suppose the previous time contraint was 5 seconds and
+                that check took 2 seconds to complete. If the next check uses
+                ``within    same timespan``, then this check has the remaing 3 seconds to complete.
+
         Example with time constraint:
         | `Check that` | _condition is true_ | within | 1 minute 30 seconds |
 
         Elevator example:
-        | `Check that` | _elevator doors are closed_ |
         | _Request elevator at floor_ | 3 |
-        | `Check that` | _elevator floor_ | `equals` | 3 | within | 20 seconds |
-        | `Check that` | _offset to floor level in mm_ | `≤` | 5 | within | 3 seconds |
+        | `Check that` | _elevator doors are closed_ | within | 20 seconds |
+        | `Check that` | _elevator floor_ | `equals` | 3 | within | 1 minute |
+        | `Check that` | _elevator doors are opened_ | within | same timespan |
+
+        In the elevator example, the doors should be closed within 20 seconds after requesting a
+        floor. Then the elevator can take a maximum of 1 minute to reach the floor and open its
+        doors. `Check that` will continue as soon as the condition is detected.
         """
-        return RobotChecks.__execute_check("Requirement", *args)
+        return self.__execute_check("Requirement", *args)
     RUN_KW_REGISTER.register_run_keyword('robotnl', check_that.__name__, args_to_process=0, deprecation_warning=False)
 
     def check_manual(self, checkRequestText=""):
@@ -210,8 +240,7 @@ class RobotChecks:
                 except Exception as e:
                     BuiltIn().log_to_console("Error in interactive keyword '%s'\n\n%s" % (newInput, e))
 
-    @staticmethod
-    def __execute_check(checkType, *args):
+    def __execute_check(self, checkType, *args):
         """
         Parse arguments for check keyword to determine its operands, evaluate them and execute the
         check.
@@ -223,14 +252,35 @@ class RobotChecks:
         TimeOutInSeconds = 0
         TimeRemaining = True
         s_TimeConstraint = ""
+        StartTime = time.perf_counter()
         if len(Arguments) >= 2 and str(Arguments[-2]).lower() == 'within':
-            EvaluatedTimeArg = RobotChecks.__evaluateOperand([Arguments[-1]])[0]
-            TimeOutInSeconds = timestr_to_secs(EvaluatedTimeArg)
-            s_TimeConstraint = Arguments[-1]
+            timearg = Arguments[-1]
             Arguments = Arguments[:-2]
+            running_timespan_start, running_timespan, s_TimeConstraint =self.nested_timespans.get(
+                self.scope_depth, (None, None, ''))
+            if str(timearg).lower() == 'same timespan':
+                if running_timespan is None:
+                    BuiltIn().fail("Joint timespan expected, but was not set before this check.")
+                TimeOutInSeconds = round(running_timespan_start + running_timespan - StartTime, ndigits=3)
+
+                remaining = self._human_time(0 if TimeOutInSeconds < 0 else TimeOutInSeconds)
+                BuiltIn().log(f"Reusing joint timespan: {s_TimeConstraint}\n"
+                              f"Must complete within the remaining {remaining}")
+            else:
+                try:
+                    EvaluatedTimeArg, s_TimeConstraint = RobotChecks.__evaluateOperand([timearg])
+                    TimeOutInSeconds = timestr_to_secs(EvaluatedTimeArg)
+                except:
+                    # End any running timespan on error
+                    if self.scope_depth in self.nested_timespans:
+                        self.nested_timespans.pop(self.scope_depth)
+                    raise
+                if is_keyword(timearg):
+                    s_TimeConstraint = f"{timearg} [{secs_to_timestr(TimeOutInSeconds)}]"
+                self.nested_timespans[self.scope_depth] = (StartTime, TimeOutInSeconds, s_TimeConstraint)
 
         if not len(Arguments):
-            BuiltIn().fail("%s check failed. There was nothing to check." % checkType)
+            BuiltIn().fail(f"{checkType} check failed. There was nothing to check.")
 
         ############################################################################################
         # Build expression
@@ -263,8 +313,6 @@ class RobotChecks:
         # Evaluate expression
         EvaluatedResult = None
 
-        StartTime = time.perf_counter()
-        TimeLeft = TimeOutInSeconds
         PollMax = 20 # After 20s people start wondering: "Is it still going?" Time for an update.
         PollMin = min(PollMax/8, TimeOutInSeconds*3/100) # Shortest delay is 3% of the target time.
         PollDelay = PollMin # Initial poll delay will be 2x PollMin
@@ -312,8 +360,14 @@ class RobotChecks:
             ReportString = f"{checkType} check on '{s_LeftOperand} {OperatorKeyword} {s_RightOperand}'"
 
         if s_TimeConstraint:
-            ReportString += " within %s" % secs_to_timestr(TimeOutInSeconds)
+            running_start, timespan, timestr = self.nested_timespans.get(self.scope_depth, (None, None, ''))
+            if TimeRemaining and running_start != StartTime:
+                elapsed = time.perf_counter() - running_start
+                BuiltIn().log(f"Check completed {self._human_time(elapsed)} into the alotted timespan ({timestr})")
+            ReportString += f" within {timestr}"
             if not TimeRemaining and EvaluatedResult == "passed":
+                overshoot = time.perf_counter() - (running_start + timespan)
+                BuiltIn().log(f"Check completed {self._human_time(overshoot)} too late")
                 ReportString += " (too late)"
                 raise CheckFailed(ReportString)
 
@@ -356,3 +410,10 @@ class RobotChecks:
             s_Operand += f" [{s_Value}]"
 
         return Value, s_Operand
+
+    @staticmethod
+    def _human_time(time_in_seconds: float):
+        """return a human readable string for a time in seconds"""
+        SKIP_MILLI = 10  # Do not report milliseconds for timespans above SKIP_MILLI seconds
+        rounded_time = int(time_in_seconds) if time_in_seconds > SKIP_MILLI else round(time_in_seconds, ndigits=3)
+        return secs_to_timestr(rounded_time)
