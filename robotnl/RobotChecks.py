@@ -151,9 +151,10 @@ class RobotChecks:
                 the specified time has passed. In the latter case the test case will fail.
 
                 Multiple checks can be linked to the same time constraint by using ``same timespan``
-                as the time contraint value. Suppose the previous time contraint was 5 seconds and
-                that check took 2 seconds to complete. If the next check uses
-                ``within    same timespan``, then this check has the remaing 3 seconds to complete.
+                as the time constraint value. Suppose the previous time constraint was 5 seconds
+                and that check took 2 seconds to complete. If the next check uses
+                ``within    same timespan``, then this check has the remaining 3 seconds to
+                complete.
 
         Example with time constraint:
         | `Check that` | _condition is true_ | within | 1 minute 30 seconds |
