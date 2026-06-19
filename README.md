@@ -55,7 +55,7 @@ Using *Check that* keywords offers a large reduction in the need for variables i
 
 ### Time constraints
 
-*Check that* offers support for executing checks that may take some time to complete. When using the optional `within` argument, followed by a time duration, *Check that* will apply *smart polling* to re-evaluate the expression and the keywords during the given period. Specifying the time limit is done using the standard [Robot Framework time format](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#toc-entry-176). It is advised to use a realistic time duration. This sets the correct expectation for the reader and helps RobotNL optimise its polling algorithm.
+*Check that* offers support for executing checks that may take some time to complete. When using the optional `within` argument, followed by a time duration, *Check that* will apply *smart polling* to re-evaluate the expression and the keywords during the given period. Specifying the time limit is done using the standard [Robot Framework time format](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#time-as-time-string). It is advised to use a realistic time duration. This sets the correct expectation for the reader and helps RobotNL optimise its polling algorithm.
 
 |**Example using time constaints**||||||
 |---|---|---|---|---|---|
