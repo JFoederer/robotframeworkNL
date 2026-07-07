@@ -1,5 +1,5 @@
-# robotframeworkNL - the oneliner
-robotframeworkNL is a proving ground to boost Robot framework closer to Natural Language.
+# RobotNL - the oneliner
+RobotNL is a proving ground to boost Robot framework closer to Natural Language.
 
 ## Introduction
 This project is an extension to [Robot framework](https://robotframework.org/) and although [Robot framework](https://robotframework.org/) made a very good step towards the goals of [keyword-driven testing ](https://en.wikipedia.org/wiki/Keyword-driven_testing) to make it readable for all stakeholders, there is still quite a lot of syntax involved that keeps test cases from really staying concise and to-the-point. In this project we will be introducing concepts to lift [Robot framework](https://robotframework.org/) to an even higher level.
@@ -55,17 +55,20 @@ Using *Check that* keywords offers a large reduction in the need for variables i
 
 ### Time constraints
 
-*Check that* offers support for executing checks that may take some time to complete. When using the optional `within` argument, followed by a time duration, *Check that* will apply *smart polling* to re-evaluate the expression and the keywords during the given period. Specifying the time limit is done using the standard [Robot Framework time format](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#toc-entry-176). It is advised to use a realistic time duration. This sets the correct expectation for the reader and helps robotnl optimise its polling algorithm.
+*Check that* offers support for executing checks that may take some time to complete. When using the optional `within` argument, followed by a time duration, *Check that* will apply *smart polling* to re-evaluate the expression and the keywords during the given period. Specifying the time limit is done using the standard [Robot Framework time format](https://robotframework.org/robotframework/latest/RobotFrameworkUserGuide.html#time-as-time-string). It is advised to use a realistic time duration. This sets the correct expectation for the reader and helps RobotNL optimise its polling algorithm.
 
 |**Example using time constaints**||||||
 |---|---|---|---|---|---|
 | Request elevator at floor | 3 |||||
 | Check that | elevator doors are closed | within | 20 seconds ||
 | Check that | current elevator floor | equals | 3 | within | 1 minute |
+| Check that | elevator doors are opened | within | same timespan ||
+
+The last line in the example uses the special argument `same timespan` to indicate that this check is linked to the same time constraint as the previous check. So, once the doors are closed, the elevator should not only reach the requested floor within 1 minute, but also the doors should be opened within that same 1-minute timespan. To use `within    same timespan` you must have executed a check with a time constraint before. This is not necessarily the directly preceding line. The most recent time constraint set within scope is used as starting point. For test suites, that is the current test suite, for keywords that is the current keyword.
 
 ### Hybrid manual testing
 
-To manually interact with your automated test run during testing or test case development, robotnl offers the *Check manual* and *Check interactive* keywords. These keywords can be included at any point in the test case to suspend the test run at the current position for user input.
+To manually interact with your automated test run during testing or test case development, RobotNL offers the *Check manual* and *Check interactive* keywords. These keywords can be included at any point in the test case to suspend the test run at the current position for user input.
 
 ***Check Manual*** allows asking the tester a question. The question typically requests manual verification of an expected outcome. The answer will PASS or FAIL the test case, which is also reflected in the test report.
 
