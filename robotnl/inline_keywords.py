@@ -85,8 +85,10 @@ class InlineKeyword(Generic[TypeVar('T')]):
 
 # work around for Libdoc
 try:
-    from robot.libdocpkg.standardtypes import STANDARD_TYPE_DOCS
-    STANDARD_TYPE_DOCS[InlineKeyword] = InlineKeyword.__doc__
+    from robot.libdocpkg.standardtypes import _std_docs_robot
+    _std_docs_robot[InlineKeyword] = InlineKeyword.__doc__
+    from robot.libdocpkg.standardtypes import _std_docs_markdown
+    _std_docs_markdown[InlineKeyword] = InlineKeyword.__doc__
 except:
     pass
 
@@ -96,8 +98,8 @@ class InlineKeywordConverter(TypeConverter):
     type = InlineKeyword
     type_name = 'InlineKeyword'
 
-    def __init__(self, type_info, custom_converters=None, languages=None):
-        super().__init__(type_info, custom_converters, languages)
+    def __init__(self, type_info, custom_converters=None, languages=None, reraise_fatal=False):
+        super().__init__(type_info, custom_converters, languages, reraise_fatal)
         self.converter = self.converter_for(self.type_info.nested[0])
         self.type_name = f"keyword returning {type_name(self.type_info.nested[0].type)}"
 
